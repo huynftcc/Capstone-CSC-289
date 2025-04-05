@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITXCraft</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ITXCraft</h1>
+        <p>Build smarter with our ITX build recommendations.</p>
+        <form id="buildForm">
+            <label for="budget">Budget ($):</label>
+            <input type="number" id="budget" name="budget" required>
+
+            <label for="use_case">What do you use your PC for?</label>
+            <select id="use_case" name="use_case">
+                <option value="gaming">Gaming</option>
+                <option value="content">Content Creation</option>
+                <option value="work">Productivity & Work</option>
+                <option value="streaming">Streaming & Recording</option>
+                <option value="ai">AI & Machine Learning</option>
+            </select>
+
+            <button type="submit">Get Recommendations</button>
+        </form>
+        <div id="results"></div>
+    </div>
+    
+    <script>
+        document.getElementById("buildForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const budget = document.getElementById("budget").value;
+            const use_case = document.getElementById("use_case").value;
+
+            const res = await fetch('/recommend', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ budget, use_case })
+            });
+
+            const data = await res.json();
+            document.getElementById("results").innerHTML = `
+                <h3>Recommended Build:</h3>
+                <p><strong>CPU:</strong> ${data.cpu}</p>
+                <p><strong>GPU:</strong> ${data.gpu}</p>
+            `;
+        });
+    </script>
+</body>
+</html>

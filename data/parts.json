@@ -1,0 +1,5 @@
+{
+    "cpus": ["Intel Core i3-13100", "Ryzen 5 7600", "Ryzen 9 7900X"],
+    "gpus": ["GTX 1660 Super", "RTX 4060 Ti", "RTX 4080"]
+  }
+  
