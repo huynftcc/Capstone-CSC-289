@@ -1,17 +1,10 @@
-# TechForge 🚀
-Your Ultimate PC Building Assistant
+# ITXCraft
 
-TechForge is a Python-powered PC part picker that helps users easily build compatible, budget-friendly, and high-performance PCs. It simplifies the PC-building process by using smart part compatibility checks, price tracking, and performance estimation.
+**ITXCraft** is a minimal, ITX-focused PC part picker website built with Flask.  
+The website provides build recommendations based on your budget and primary PC use case, all in a sleek, black-themed design.
 
-# Features
-- Smart Compatibility Checker – Ensures selected parts work together.
-- Build Recommendations – Suggest parts based on budget and use case.
-- Price Tracking – Monitors part prices with web scraping/API integration.
-- Performance Estimator – Predicts FPS for selected hardware.
-
-Tech Stack
-- Backend: Python 
-- Frontend: HTML, CSS, JavaScript
-- Database: SQLite/MySQL
-- Web Scraping: Selenium (for price tracking)
-- Visualization: Chart.js
+## Features
+- **Minimalistic UI:** Black-dominated, clean design.
+- **Budget & Use Case:** Input your budget and select what you primarily use your PC for.
+- **Smart Recommendations:** Basic logic for CPU and GPU suggestions.
+- **ITX Focus:** Streamlined compatibility for small form factor builds.
