@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}MiniRig - Blog{% endblock %}
+
+{% block content %}
+<!-- Page Title -->
+<section class="page-title">
+    <h1>MiniRig Blog</h1>
+    <p>Latest news, guides, and insights into the world of small form factor PCs</p>
+</section>
+
+<!-- Blog Content -->
+<section class="blog-content">
+    <div class="blog-grid">
+        <article class="blog-post">
+            <img src="{{ url_for('static', filename='img/blog/cooling.jpg') }}" alt="Cooling Solutions">
+            <div class="post-content">
+                <h2>Cooling Solutions for ITX Builds</h2>
+                <div class="post-meta">
+                    <span class="post-date">April 15, 2025</span>
+                    <span class="post-author">by MiniRig Team</span>
+                </div>
+                <p>One of the biggest challenges in ITX builds is effective cooling. In this article, we explore the best cooling solutions for small form factor PCs...</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
+        </article>
+        
+        <article class="blog-post">
+            <img src="{{ url_for('static', filename='img/blog/cases.jpg') }}" alt="Premium ITX Cases">
+            <div class="post-content">
+                <h2>Top 5 Premium ITX Cases in 2025</h2>
+                <div class="post-meta">
+                    <span class="post-date">April 8, 2025</span>
+                    <span class="post-author">by Alex Chen</span>
+                </div>
+                <p>Premium ITX cases offer exceptional build quality, innovative designs, and unique features. Here are our top picks for 2025...</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
+        </article>
+        
+        <article class="blog-post">
+            <img src="{{ url_for('static', filename='img/blog/guide.jpg') }}" alt="First-Time Builder Guide">
+            <div class="post-content">
+                <h2>First-Time ITX Builder's Guide</h2>
+                <div class="post-meta">
+                    <span class="post-date">March 30, 2025</span>
+                    <span class="post-author">by Sarah Johnson</span>
+                </div>
+                <p>Building your first ITX PC can be intimidating. This comprehensive guide walks you through every step of the process...</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
+        </article>
+        
+        <article class="blog-post">
+            <img src="{{ url_for('static', filename='img/blog/sff.jpg') }}" alt="SFF vs ATX">
+            <div class="post-content">
+                <h2>SFF vs ATX: When to Choose Each</h2>
+                <div class="post-meta">
+                    <span class="post-date">March 22, 2025</span>
+                    <span class="post-author">by Michael Torres</span>
+                </div>
+                <p>Small form factor builds aren't for everyone. We break down the pros and cons of SFF vs ATX to help you decide which is right for you...</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}

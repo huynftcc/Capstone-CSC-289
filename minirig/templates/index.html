@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Build Small. Dream Big.</h1>
+    <p>The ultimate resource for ITX PC enthusiasts. Create powerful small form factor builds with ease.</p>
+    
+    <div class="image-slider">
+        <div class="slide">
+            <img src="{{ url_for('static', filename='img/placeholder.jpg') }}" alt="ITX Build Example">
+        </div>
+    </div>
+    
+    <a href="{{ url_for('build') }}" class="cta-button">Start Your Build</a>
+</section>
+
+<!-- Why ITX Section -->
+<section class="why-itx">
+    <h2 class="section-title">Why Choose ITX Builds?</h2>
+    
+    <div class="benefits">
+        <div class="benefit">
+            <h3>Space Efficiency</h3>
+            <p>Maximum performance in minimal space. Perfect for tight workspaces or clean desk setups.</p>
+        </div>
+        
+        <div class="benefit">
+            <h3>Portability</h3>
+            <p>Take your high-performance PC anywhere. Easily transportable for LAN parties or workstation mobility.</p>
+        </div>
+        
+        <div class="benefit">
+            <h3>Aesthetics</h3>
+            <p>Clean, minimal setups that showcase your components in a compact, thoughtful design.</p>
+        </div>
+        
+        <div class="benefit">
+            <h3>Efficiency</h3>
+            <p>Lower power consumption without sacrificing performance. Sustainable and budget-friendly.</p>
+        </div>
+    </div>
+</section>
+
+<!-- About ITX Section -->
+<section class="about-itx">
+    <h2 class="section-title">Understanding ITX Builds</h2>
+    
+    <div class="info-grid">
+        <div class="info-card">
+            <h3>Form Factor Comparison</h3>
+            <p>ITX motherboards measure just 6.7" × 6.7" (170mm × 170mm), compared to ATX at 12" × 9.6" (305mm × 244mm) and mATX at 9.6" × 9.6" (244mm × 244mm).</p>
+            <p>These compact dimensions enable significantly smaller cases while still supporting powerful CPUs and GPUs.</p>
+        </div>
+        
+        <div class="info-card">
+            <h3>Common Challenges</h3>
+            <p>Heat management requires careful planning in compact cases. Component compatibility can be more restrictive due to space constraints.</p>
+            <p>Our compatibility checker helps you navigate these challenges with confidence.</p>
+        </div>
+        
+        <div class="info-card">
+            <h3>Benefits and Use Cases</h3>
+            <p>Perfect for college dorms, small apartments, or minimalist setups. Ideal for creating a powerful HTPC or living room gaming machine.</p>
+            <p>Many ITX builds can match or exceed the performance of full-sized PCs with proper component selection.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Features Navigation -->
+<section class="features-nav">
+    <h2 class="section-title">Explore MiniRig Features</h2>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Component Compatibility</h3>
+            <p>Find parts that work together perfectly in your small form factor build.</p>
+            <a href="{{ url_for('build') }}">Check Compatibility</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Build Guides</h3>
+            <p>Step-by-step tutorials for creating your dream ITX system.</p>
+            <a href="#">View Guides</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Component Database</h3>
+            <p>Browse our carefully curated selection of ITX-friendly parts.</p>
+            <a href="{{ url_for('build') }}">Explore Components</a>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Blog</h3>
+            <p>Latest news, reviews, and insights into the world of small form factor PCs.</p>
+            <a href="{{ url_for('blog') }}">Read Articles</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

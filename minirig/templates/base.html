@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MiniRig - ITX PC Building Made Simple{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">MiniRig</a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('build') }}">Component Picker</a></li>
+                <li><a href="#">Guides</a></li>
+                <li><a href="{{ url_for('blog') }}">Blog</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    {% block content %}{% endblock %}
+    
+    <!-- Go Back Button -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 99;">
+        <button onclick="window.history.back()" class="cta-button" style="background-color: #000; color: #fff;">Go Back</button>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MiniRig. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

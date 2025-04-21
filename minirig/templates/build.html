@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}MiniRig - ITX PC Build Tool{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/build.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Page Title -->
+<section class="page-title">
+    <h1>Build Your ITX PC</h1>
+    <p>Select compatible components for your small form factor build with our interactive tool</p>
+</section>
+
+<!-- Build Tool -->
+<div class="build-container">
+    <!-- Component Selection -->
+    <div class="component-selection">
+        <h2>Select Components</h2>
+        
+        <div class="component-category" id="case-category">
+            <h3>Case</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search cases..." id="case-search">
+            </div>
+            <select id="case-select">
+                <option value="">Select a Case</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="motherboard-category">
+            <h3>Motherboard</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search motherboards..." id="motherboard-search">
+            </div>
+            <select id="motherboard-select">
+                <option value="">Select a Motherboard</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="cpu-category">
+            <h3>CPU</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search CPUs..." id="cpu-search">
+            </div>
+            <select id="cpu-select">
+                <option value="">Select a CPU</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="cooler-category">
+            <h3>CPU Cooler</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search CPU coolers..." id="cooler-search">
+            </div>
+            <select id="cooler-select">
+                <option value="">Select a CPU Cooler</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="memory-category">
+            <h3>Memory</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search memory..." id="memory-search">
+            </div>
+            <select id="memory-select">
+                <option value="">Select Memory</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="storage-category">
+            <h3>Storage</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search storage..." id="storage-search">
+            </div>
+            <select id="storage-select">
+                <option value="">Select Storage</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="gpu-category">
+            <h3>Graphics Card</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search graphics cards..." id="gpu-search">
+            </div>
+            <select id="gpu-select">
+                <option value="">Select a Graphics Card</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div class="component-category" id="psu-category">
+            <h3>Power Supply</h3>
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search power supplies..." id="psu-search">
+            </div>
+            <select id="psu-select">
+                <option value="">Select a Power Supply</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+    </div>
+    
+    <!-- Build Summary -->
+    <div class="build-summary">
+        <h2>Your Build</h2>
+        
+        <div class="compatibility-status">
+            <h3>Compatibility Check</h3>
+            <p id="compatibility-message">Select components to check compatibility</p>
+        </div>
+        
+        <div class="selected-components" id="selected-components-list">
+            <!-- Selected components will be displayed here via JavaScript -->
+        </div>
+        
+        <div class="total-price">
+            <p>Estimated Total: <span id="total-price">$0.00</span></p>
+        </div>
+        
+        <div class="build-name-container">
+            <h3>Name Your Build</h3>
+            <input type="text" id="build-name" placeholder="My Awesome ITX Build">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-button save-button" id="save-build">Save Build</button>
+            <button class="action-button clear-button" id="clear-build">Clear All</button>
+            <button class="action-button share-button" id="share-build">Share Build</button>
+        </div>
+    </div>
+    
+    <!-- Recommendations -->
+    <div class="recommendations">
+        <h2>Recommended Components</h2>
+        <p>Based on your current selections, we recommend these components:</p>
+        
+        <div class="recommendation-grid" id="recommendations-container">
+            <!-- Recommendations will be displayed here via JavaScript -->
+            <p id="no-recommendations">Start selecting components to see recommendations</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/build.js') }}"></script>
+{% endblock %}
