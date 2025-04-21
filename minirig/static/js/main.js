@@ -1,33 +1,47 @@
 // Main JavaScript file for MiniRig website
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Image slider functionality (basic implementation)
+    // Image slider functionality
     const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
     let currentSlide = 0;
     
-    // If there are multiple slides, set up automatic rotation
-    if (slides.length > 1) {
-        setInterval(function() {
-            // Hide current slide
-            slides[currentSlide].style.opacity = '0';
-            
-            // Move to next slide
-            currentSlide = (currentSlide + 1) % slides.length;
-            
-            // Show new slide
-            slides[currentSlide].style.opacity = '1';
-        }, 5000); // Change slide every 5 seconds
+    // Function to show a specific slide
+    function showSlide(index) {
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Add active class to current slide and dot
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        
+        // Update current slide index
+        currentSlide = index;
     }
     
-    // Responsive navigation for mobile
-    const menuToggle = document.querySelector('.menu-toggle');
-    const nav = document.querySelector('nav ul');
+    // Set up automatic rotation
+    let slideInterval = setInterval(function() {
+        let nextSlide = (currentSlide + 1) % slides.length;
+        showSlide(nextSlide);
+    }, 5000); // Change slide every 5 seconds
     
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
-            nav.classList.toggle('active');
+    // Set up click events for dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            // Clear the automatic rotation
+            clearInterval(slideInterval);
+            
+            // Show the clicked slide
+            showSlide(index);
+            
+            // Reset the automatic rotation
+            slideInterval = setInterval(function() {
+                let nextSlide = (currentSlide + 1) % slides.length;
+                showSlide(nextSlide);
+            }, 5000);
         });
-    }
+    });
     
-    console.log('Main JS loaded');
+    console.log('Image slider initialized with ' + slides.length + ' slides');
 });

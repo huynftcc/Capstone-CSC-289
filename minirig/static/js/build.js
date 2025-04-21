@@ -396,7 +396,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             
             if (data.share_code) {
-                alert(`Build saved! Share code: ${data.share_code}`);
+                // Display the share code in the UI instead of an alert
+                const shareCodeDisplay = document.getElementById('share-code-display');
+                const shareCodeText = document.getElementById('share-code-text');
+                
+                if (shareCodeDisplay && shareCodeText) {
+                    shareCodeText.textContent = data.share_code;
+                    shareCodeDisplay.style.display = 'block';
+                }
+                
                 return data;
             } else {
                 alert('Error saving build');
@@ -436,6 +444,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset build name
         buildNameInput.value = '';
         
+        // Hide share code display
+        const shareCodeDisplay = document.getElementById('share-code-display');
+        if (shareCodeDisplay) {
+            shareCodeDisplay.style.display = 'none';
+        }
+        
         // Update UI
         updateSelectedComponents();
         
@@ -448,38 +462,7 @@ document.addEventListener('DOMContentLoaded', function() {
         noRecommendations.style.display = 'block';
     }
     
-    // Share build (generate shareable URL)
-    async function shareBuild() {
-        // Check if build is saved first
-        const buildName = buildNameInput.value.trim() || 'Untitled Build';
-        
-        // Get component IDs
-        const componentIds = Object.values(selectedComponents)
-            .filter(component => component !== null)
-            .map(component => component.id);
-        
-        if (componentIds.length === 0) {
-            alert('Please select at least one component before sharing');
-            return;
-        }
-        
-        // Save build first if not already saved
-        const buildData = await saveBuild();
-        
-        if (buildData && buildData.share_code) {
-            const shareUrl = `${window.location.origin}/build?code=${buildData.share_code}`;
-            
-            // Create a temporary input to copy the URL to clipboard
-            const tempInput = document.createElement('input');
-            tempInput.value = shareUrl;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            
-            alert(`Shareable URL copied to clipboard: ${shareUrl}`);
-        }
-    }
+
     
     // Event listeners for component selection
     caseSelect.addEventListener('change', function() {

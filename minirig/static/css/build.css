@@ -141,15 +141,6 @@ select, input {
     background-color: #ddd;
 }
 
-.share-button {
-    background-color: #2ecc71;
-    color: #fff;
-}
-
-.share-button:hover {
-    background-color: #27ae60;
-}
-
 /* Recommendations */
 .recommendations {
     width: 100%;
@@ -215,4 +206,84 @@ select, input {
     .recommendation-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+#share-code-input {
+    margin: 1rem 0;
+}
+
+#load-code-button {
+    padding: 0.8rem 1.5rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.load-button {
+    background-color: #4a6fa5;
+    color: #fff;
+}
+
+.load-button:hover {
+    background-color: #3a5985;
+}
+
+/* Share Code Display */
+.share-code-container {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    border-left: 4px solid #2ecc71;
+    display: none; /* Hidden by default */
+}
+
+.share-code {
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.1rem;
+    background-color: #fff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    margin-left: 0.5rem;
 }

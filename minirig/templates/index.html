@@ -7,8 +7,22 @@
     <p>The ultimate resource for ITX PC enthusiasts. Create powerful small form factor builds with ease.</p>
     
     <div class="image-slider">
+        <!-- Each slide is wrapped in its own div with the class "slide" -->
+        <div class="slide active">
+            <img src="{{ url_for('static', filename='img/showcase/itx_build_1.jpg') }}" alt="ITX Build Example 1">
+        </div>
         <div class="slide">
-            <img src="{{ url_for('static', filename='img/placeholder.jpg') }}" alt="ITX Build Example">
+            <img src="{{ url_for('static', filename='img/showcase/itx_build_2.jpg') }}" alt="ITX Build Example 2">
+        </div>
+        <div class="slide">
+            <img src="{{ url_for('static', filename='img/showcase/itx_build_3.jpg') }}" alt="ITX Build Example 3">
+        </div>
+        
+        <!-- Navigation dots -->
+        <div class="slider-nav">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
         </div>
     </div>
     

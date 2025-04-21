@@ -109,7 +109,12 @@
         <div class="action-buttons">
             <button class="action-button save-button" id="save-build">Save Build</button>
             <button class="action-button clear-button" id="clear-build">Clear All</button>
-            <button class="action-button share-button" id="share-build">Share Build</button>
+            <button class="action-button load-button" id="load-build">Load Build</button>
+        </div>
+        
+        <!-- Share Code Display -->
+        <div id="share-code-display" class="share-code-container">
+            <p>Your build has been saved. Share code: <span id="share-code-text" class="share-code"></span></p>
         </div>
     </div>
     
@@ -121,6 +126,17 @@
         <div class="recommendation-grid" id="recommendations-container">
             <!-- Recommendations will be displayed here via JavaScript -->
             <p id="no-recommendations">Start selecting components to see recommendations</p>
+        </div>
+    </div>
+    
+    <!-- Load Build Modal -->
+    <div id="load-build-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Load a Saved Build</h2>
+            <p>Enter the share code for the build you want to load:</p>
+            <input type="text" id="share-code-input" placeholder="Enter share code">
+            <button id="load-code-button">Load</button>
         </div>
     </div>
 </div>
