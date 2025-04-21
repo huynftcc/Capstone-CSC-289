@@ -100,14 +100,61 @@ def init_db():
             
             # CPUs
             ('Intel Core i5-12600K', 'cpu', 'Intel', 'Core i5-12600K', 279.99, 
-             json.dumps({'cores': 10, 'threads': 16, 'base_clock': 3.7, 'socket': 'LGA1700'}),
+             json.dumps({'cores': 10, 'threads': 16, 'base_clock': 3.7, 'socket': 'LGA1700', 'tdp': 125}),
              None, '/static/img/cpus/i5_12600k.jpg', '#'),
             
             ('AMD Ryzen 5 5600X', 'cpu', 'AMD', 'Ryzen 5 5600X', 229.99, 
-             json.dumps({'cores': 6, 'threads': 12, 'base_clock': 3.7, 'socket': 'AM4'}),
+             json.dumps({'cores': 6, 'threads': 12, 'base_clock': 3.7, 'socket': 'AM4', 'tdp': 65}),
              None, '/static/img/cpus/ryzen_5600x.jpg', '#'),
             
-            # More components would be added here
+            # CPU Coolers
+            ('Noctua NH-L9i', 'cooler', 'Noctua', 'NH-L9i', 44.95, 
+             json.dumps({'type': 'Air', 'height': 37, 'tdp_rating': 95}),
+             json.dumps({'length': 95, 'width': 95, 'height': 37}),
+             '/static/img/coolers/noctua_nhl9i.jpg', '#'),
+            
+            ('Noctua NH-L12S', 'cooler', 'Noctua', 'NH-L12S', 59.95, 
+             json.dumps({'type': 'Air', 'height': 70, 'tdp_rating': 120}),
+             json.dumps({'length': 128, 'width': 128, 'height': 70}),
+             '/static/img/coolers/noctua_nhl12s.jpg', '#'),
+            
+            # Memory
+            ('Corsair Vengeance LPX 16GB', 'memory', 'Corsair', 'Vengeance LPX 16GB (2x8GB) DDR4-3200', 89.99, 
+             json.dumps({'capacity': 16, 'speed': 3200, 'type': 'DDR4', 'modules': 2, 'profile': 'low'}),
+             None, '/static/img/memory/corsair_vengeance.jpg', '#'),
+            
+            ('G.Skill Ripjaws V 16GB', 'memory', 'G.Skill', 'Ripjaws V 16GB (2x8GB) DDR4-3600', 79.99, 
+             json.dumps({'capacity': 16, 'speed': 3600, 'type': 'DDR4', 'modules': 2, 'profile': 'standard'}),
+             None, '/static/img/memory/gskill_ripjaws.jpg', '#'),
+            
+            # Storage
+            ('Samsung 970 EVO Plus 1TB', 'storage', 'Samsung', '970 EVO Plus 1TB NVMe SSD', 129.99, 
+             json.dumps({'capacity': 1000, 'type': 'M.2 NVMe', 'read_speed': 3500, 'write_speed': 3300}),
+             None, '/static/img/storage/samsung_970evo.jpg', '#'),
+            
+            ('WD Black SN750 1TB', 'storage', 'Western Digital', 'Black SN750 1TB NVMe SSD', 139.99, 
+             json.dumps({'capacity': 1000, 'type': 'M.2 NVMe', 'read_speed': 3470, 'write_speed': 3000}),
+             None, '/static/img/storage/wd_black.jpg', '#'),
+            
+            # GPUs
+            ('NVIDIA GeForce RTX 3060 Ti', 'gpu', 'NVIDIA', 'GeForce RTX 3060 Ti 8GB', 399.99, 
+             json.dumps({'memory': 8, 'memory_type': 'GDDR6', 'tdp': 200}),
+             json.dumps({'length': 242, 'width': 112, 'height': 38}),
+             '/static/img/gpus/rtx_3060ti.jpg', '#'),
+            
+            ('AMD Radeon RX 6700 XT', 'gpu', 'AMD', 'Radeon RX 6700 XT 12GB', 479.99, 
+             json.dumps({'memory': 12, 'memory_type': 'GDDR6', 'tdp': 230}),
+             json.dumps({'length': 267, 'width': 120, 'height': 40}),
+             '/static/img/gpus/rx_6700xt.jpg', '#'),
+            
+            # PSUs
+            ('Corsair SF600', 'psu', 'Corsair', 'SF600 600W 80+ Gold SFX', 129.99, 
+             json.dumps({'wattage': 600, 'efficiency': 'Gold', 'form_factor': 'SFX', 'modular': 'Full'}),
+             None, '/static/img/psus/corsair_sf600.jpg', '#'),
+            
+            ('Corsair SF750', 'psu', 'Corsair', 'SF750 750W 80+ Platinum SFX', 169.99, 
+             json.dumps({'wattage': 750, 'efficiency': 'Platinum', 'form_factor': 'SFX', 'modular': 'Full'}),
+             None, '/static/img/psus/corsair_sf750.jpg', '#')
         ]
         
         conn.executemany(
@@ -135,7 +182,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Initialize database when the app starts
+# Initialize database on app startup
 @app.before_first_request
 def before_first_request():
     init_db()
@@ -293,6 +340,27 @@ def get_build(share_code):
     
     return jsonify(build_dict)
 
+# Create directory for static files if it doesn't exist
+def create_directories():
+    os.makedirs('static/css', exist_ok=True)
+    os.makedirs('static/js', exist_ok=True)
+    os.makedirs('static/img/blog', exist_ok=True)
+    os.makedirs('static/img/cases', exist_ok=True)
+    os.makedirs('static/img/cpus', exist_ok=True)
+    os.makedirs('static/img/motherboards', exist_ok=True)
+    os.makedirs('static/img/coolers', exist_ok=True)
+    os.makedirs('static/img/memory', exist_ok=True)
+    os.makedirs('static/img/storage', exist_ok=True)
+    os.makedirs('static/img/gpus', exist_ok=True)
+    os.makedirs('static/img/psus', exist_ok=True)
+    
+    # Create placeholder image for development
+    placeholder_path = 'static/img/placeholder.jpg'
+    if not os.path.exists(placeholder_path):
+        with open(placeholder_path, 'w') as f:
+            f.write('Placeholder image - replace with actual image file')
+
 # Run the app
 if __name__ == '__main__':
+    create_directories()
     app.run(debug=True)
