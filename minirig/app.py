@@ -196,10 +196,6 @@ def index():
 def build():
     return render_template('build.html')
 
-@app.route('/blog')
-def blog():
-    return render_template('blog.html')
-
 # API Routes
 @app.route('/api/components', methods=['GET'])
 def get_components():

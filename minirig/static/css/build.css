@@ -37,22 +37,6 @@ select, input {
     margin-bottom: 1rem;
 }
 
-.search-box {
-    position: relative;
-    margin-bottom: 1rem;
-}
-
-.search-box input {
-    padding-left: 2.5rem;
-}
-
-.search-icon {
-    position: absolute;
-    left: 0.8rem;
-    top: 0.8rem;
-    color: #777;
-}
-
 /* Build Summary */
 .build-summary {
     flex: 1;
