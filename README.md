@@ -1,6 +1,6 @@
-# ITXCraft
+# MiniRig
 
-**ITXCraft** is a minimal, ITX-focused PC part picker website built with Flask.  
+**MiniRig** is a minimal, ITX-focused PC part picker website built with Flask.  
 The website provides build recommendations based on your budget and primary PC use case, all in a sleek, black-themed design.
 
 ## Features
