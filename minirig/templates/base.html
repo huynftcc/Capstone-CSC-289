@@ -13,10 +13,23 @@
         <a href="{{ url_for('index') }}" class="logo">MiniRig</a>
         <nav>
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('build') }}">Component Picker</a></li>
+              <li>
+                <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('recommend') }}" class="{% if request.endpoint == 'recommend' %}active{% endif %}">
+                  Recommend Build
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('build') }}" class="{% if request.endpoint == 'build' %}active{% endif %}">
+                  Component Picker
+                </a>
+              </li>
             </ul>
-        </nav>
+          </nav>
     </header>
     
     {% block content %}{% endblock %}

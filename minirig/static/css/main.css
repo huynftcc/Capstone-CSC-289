@@ -401,3 +401,14 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+nav ul li a {
+text-decoration: none;
+        padding: 0.5rem;
+}
+  
+  /* Underline active and hover links */
+nav ul li a.active,
+nav ul li a:hover {
+    text-decoration: underline;
+}
