@@ -1,0 +1,58 @@
+Name,Chip,Memory,Base Clock,Boost Clock,Color,Length,Price
+Gigabyte GAMING OC,Radeon RX 9070 XT,16 GB,2520 MHz,3060 MHz,Black,288 mm,$975.99 
+PowerColor Reaper,Radeon RX 9070 XT,16 GB,2400 MHz,2970 MHz,Black / Red,289 mm,"$1,024.99 "
+ASRock Steel Legend,Radeon RX 9070 XT,16 GB,2400 MHz,2970 MHz,White / Gray,298 mm,$919.00 
+ASRock Steel Legend Dark,Radeon RX 9070 XT,16 GB,2400 MHz,2970 MHz,Black / Gray,298 mm,$919.00 
+Asus PRIME OC,Radeon RX 9070 XT,16 GB,2460 MHz,3030 MHz,Black,312 mm,$896.69 
+Sapphire PULSE,Radeon RX 9070 XT,16 GB,2400 MHz,2970 MHz,Black,320 mm,$879.99 
+Sapphire PURE,Radeon RX 9070 XT,16 GB,2460 MHz,3010 MHz,White,320 mm,"$1,199.00 "
+XFX Swift,Radeon RX 9070 XT,16 GB,1660 MHz,2970 MHz,White,325 mm,$999.00 
+XFX Swift,Radeon RX 9070 XT,16 GB,1660 MHz,2970 MHz,Black,325 mm,"$1,040.55 "
+Sapphire PULSE,Radeon RX 9070 ,16 GB,2070 MHz,2520 MHz,Black,280 mm,$749.99 
+Gigabyte GAMING OC,Radeon RX 9070,16 GB,2070 MHz,2700 MHz,Black,288 mm,$799.00 
+PowerColor Reaper,Radeon RX 9070,16 GB,2070 MHz,2520 MHz,Black,289 mm,$994.99 
+ASRock Challenger,Radeon RX 9070,16 GB,2070 MHz,2520 MHz,Black / Silver,290 mm,$889.00 
+ASRock Steel Legend OC,Radeon RX 9070,16 GB,2210 MHz,2700 MHz,White / Gray,298 mm,$974.00 
+Asus PRIME OC,Radeon RX 9070,16 GB,2120 MHz,2610 MHz,Black,312 mm,$906.99 
+Sapphire PURE,Radeon RX 9070,16 GB,2210 MHz,2700 MHz,White,320 mm,$849.95 
+XFX Swift OC,Radeon RX 9070,16 GB,1440 MHz,2700 MHz,Black,325 mm,$652.98 
+XFX Swift OC (White),Radeon RX 9070,16 GB,1440 MHz,2700 MHz,White,325 mm,$769.99 
+NVIDIA Founders Edition,GeForce RTX 5090,32 GB,2017 MHz,2407 MHz,Black / Silver,304 mm,"$4,130.95 "
+MSI VENTUS 3X OC,GeForce RTX 5090,32 GB,2010 MHz,2407 MHz,Silver / Black,325 mm,"$3,893.99 "
+MSI INSPIRE 3X OC,GeForce RTX 5080,16 GB,2300 MHz,2655 MHz,Gold / Black,288 mm,"$1,559.98 "
+Inno3D X3,GeForce RTX 5080,16 GB,2295 MHz,2617 MHz,Black / Silver,300 mm,"$1,399.98 "
+Inno3D X3,GeForce RTX 5080,16 GB,2295 MHz,2640 MHz,Black / Silver,300 mm,"$1,799.99 "
+MSI SHADOW 3X OC,GeForce RTX 5080,16 GB,2295 MHz,2640 MHz,White / Silver,300 mm,"$1,409.99 "
+MSI VENTUS 3X OC,GeForce RTX 5080,16 GB,2290 MHz,2655 MHz,Black,300 mm,"$1,599.98 "
+MSI VENTUS 3X OC PLUS,GeForce RTX 5080,16 GB,2300 MHz,2655 MHz,White,300 mm,"$1,409.99 "
+Gigabyte AERO OC SFF,GeForce RTX 5080,16 GB,2300 MHz,2620 MHz,White / Silver,304 mm,"$1,579.99 "
+Gigabyte WINDFORCE OC SFF,GeForce RTX 5080,16 GB,2300 MHz,2620 MHz,Black / Gray,304 mm,"$1,409.99 "
+NVIDIA Founders Edition,GeForce RTX 5080,16 GB,2300 MHz,2620 MHz,Black / Silver,304 mm,"$1,698.63 "
+Asus PRIME OC,GeForce RTX 5080,16 GB,2300 MHz,2620 MHz,Black / White,306 mm,"$1,699.99 "
+Asus PRIME,GeForce RTX 5080,16 GB,2300 MHz,2620 MHz,Black / White,306 mm,"$1,699.99 "
+MSI RTX 5060 Ti 16G INSPIRE 2X OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2632 MHz,Gold / Black,204 mm,$489.99 
+MSI RTX 5060 Ti 8G INSPIRE 2X OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2632 MHz,Gold / Black,204 mm,$479.99 
+MSI RTX 5060 Ti 8G INSPIRE 2X OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Gold / Black,204 mm,$419.99 
+Gigabyte WINDFORCE,GeForce RTX 5060 Ti,16 GB,2410 MHz,2632 MHz,Black,208 mm,$479.99 
+Gigabyte WINDFORCE,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,208 mm,$429.99 
+Gigabyte EAGLE OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2617 MHz,Black / Silver,215 mm,$519.98 
+Gigabyte EAGLE OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2617 MHz,Black / Silver,215 mm,$509.99 
+Gigabyte EAGLE OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,215 mm,$469.99 
+Zotac Twin Edge,GeForce RTX 5060 Ti,16 GB,2410 MHz,2617 MHz,Black,220 mm,$499.99 
+Zotac Twin Edge,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,220 mm,$459.99 
+Zotac GAMING AMP,GeForce RTX 5060 Ti,16 GB,2410 MHz,2617 MHz,Black,220 mm,$529.99 
+Zotac GAMING AMP,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,220 mm,$459.99 
+MSI VENTUS 2X PLUS OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2617 MHz,Black / Gray,227 mm,$509.98 
+MSI VENTUS 2X PLUS OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black / Gray,227 mm,$429.99 
+MSI VENTUS 2X,GeForce RTX 5060 Ti,16 GB,2410 MHz,2587 MHz,Black / Gray,227 mm,$489.99 
+MSI VENTUS 2X,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black / Gray,227 mm,$469.99 
+Asus DUAL OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2632 MHz,Black / Silver,229 mm,$532.98 
+Asus DUAL OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black / Silver,229 mm,$489.99 
+Asus DUAL,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black / Silver,229 mm,$469.99 
+MSI GAMING OC,GeForce RTX 5060 Ti,16 GB,2410 MHz,2587 MHz,Black,247 mm,$569.99 
+MSI GAMING OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,247 mm,$539.99 
+Gainward Ghost OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,262 mm,$459.98 
+Gainward Ghost,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,262 mm,$439.99 
+Gigabyte GAMING OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,262 mm,$459.99 
+Gigabyte GAMING OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black,262 mm,$439.99 
+Gigabyte AERO OC,GeForce RTX 5060 Ti,8 GB,2410 MHz,2572 MHz,Black / White,262 mm,$489.99 

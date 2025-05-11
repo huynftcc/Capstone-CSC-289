@@ -1,0 +1,21 @@
+Name,Price (USD),Color,Socket compatibility,Cooler type,Height/Radiator size,RGB
+Noctua NH-L12S,74.95,Silver,"AM5, LGA 1700, LGA 1851",Air Cool,70 mm,No
+Noctua NH-L9x65 chromax.black,79.95,Black,"AM5, LGA 1700, LGA 1851",Air Cool,65 mm,No
+Scythe Big Shuriken 3 Rev.B,55.99,Black/Silver,"AM5, LGA 1700",Air Cool,67 mm,No
+be quiet! Pure Rock LP,49.99,Black,"AM5, LGA 1700",Air Cool,45 mm,No
+Thermalright AXP90-X53,35.99,Copper,"AM5, LGA 1700",Air Cool,53 mm,No
+ID-COOLING IS-55 ,54.99,Black,"AM5, LGA 1700, LGA 1851",Air Cool,55 mm,No
+Corsair iCUE H100i Elite Capellix XT,179.99,Black,"AM5, LGA 1700",AIO,240 mm radiator,Yes
+NZXT Kraken X53,179.99,Black,"AM5, LGA 1700",AIO,240 mm radiator,Yes
+Cooler Master 120L Core,64.9,Black,"AM5, LGA 1700",AIO,120 mm radiator,Yes
+Lian Li Galahad 240,119.99,White,"AM5, LGA 1700",AIO,240 mm radiator,Yes
+NZXT Kraken 120,89.99,Black,"AM5, LGA 1700",AIO,120 mm radiator,Yes
+Cooler Master 240 Atmos,127.99,Black,"AM5, LGA 1700",AIO,240mm radiator,Yes
+NZXT Kraken 120,89.99,Black,"LGA 1700, AM5",AIO,120mm radiator,No
+Thermalright Aqua Elite V3,34.9,Black,"LGA 1700, AM5",AIO,120mm radiator,No
+Cooler Master MasterLiquid 120L Core,54.99,Black,"LGA 1700, AM5",AIO,120mm radiator,No
+Corsair H60 (2018),69.99,Black,"LGA 1700, AM5",AIO,120mm radiator,No
+NZXT Kraken M22,89.99,Black,"LGA 1700, AM5",AIO,120mm radiator,No
+Corsair iCUE H60x RGB ELITE,79.99,Black,"LGA 1700, AM5",AIO,120mm radiator,Yes
+Cooler Master MASTERLIQUID ML120L RGB V2,69.98,Black,"LGA 1700, AM5",AIO,120mm radiator,Yes
+Thermaltake TH120 V2 ARGB Sync,69.98,Black,"LGA 1700, AM5",AIO,120mm radiator,Yes
