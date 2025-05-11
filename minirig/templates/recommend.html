@@ -1,15 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}MiniRig - What we recommend{% endblock %}
+{% block title %}MiniRig – What we recommend{% endblock %}
 
 {% block content %}
-<!-- Page header (matches other pages) -->
-<section class="page-title">
-  <h1>Here is what we suggested for build and parts</h1>
-</section>
+  <section class="page-title">
+    <h1>What we recommend</h1>
+    <p>Select compatible components for your small form factor build with our pre-configured recommendations.</p>
+  </section>
 
-<!-- Empty container for your content -->
-<div class="container main-content">
-  <!-- TODO: insert cards or recommendation widgets here -->
-</div>
+  <!-- Grid container for recommendation cards -->
+  <div class="cards-grid container main-content">
+    <!-- Top row: AMD builds -->
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">Low Budget AMD Build</h3>
+      </div>
+    </div>
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">Mid AMD Build</h3>
+      </div>
+    </div>
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">High AMD Build</h3>
+      </div>
+    </div>
+
+    <!-- Bottom row: Intel builds -->
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">Low Budget Intel Build</h3>
+      </div>
+    </div>
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">Mid Intel Build</h3>
+      </div>
+    </div>
+    <div class="card placeholder">
+      <div class="card-body">
+        <h3 class="card-title">High Intel Build</h3>
+      </div>
+    </div>
+  </div>
+{% endblock %}
 {% endblock %}

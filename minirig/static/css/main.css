@@ -172,7 +172,7 @@ nav ul li a:hover {
 
 .page-title h1 {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .page-title p {
@@ -418,4 +418,10 @@ nav ul li a {
 nav ul li a.active,
 nav ul li a:hover {
     text-decoration: underline;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
 }
