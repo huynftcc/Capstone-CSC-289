@@ -1,50 +1,50 @@
-CPU Name,Price (USD),Core Count,Base Clock,Boost Clock,TDP,Integrated Graphics,Microarchitecture
-AMD Ryzen 5 7500F,143,6,3.7 GHz,5 GHz,65,None,Zen 4
-AMD Ryzen 5 7600,198.87,6,3.8 GHz,5.1 GHz,65,Radeon,Zen 4
-AMD Ryzen 5 7600X,205.3,6,4.7 GHz,5.3 GHz,105,Radeon,Zen 4
-AMD Ryzen 5 8500G,181.22,6,4.1 GHz,5 GHz,65,Radeon 740M,Zen 4
-AMD Ryzen 5 9600X,208,6,3.9 GHz,5.4 GHz,65,Radeon,Zen 5
-AMD Ryzen 7 7700,270,8,3.6 GHz,5.3 GHz,65,Radeon,Zen 4
-AMD Ryzen 7 7700X,282.14,8,4.5 GHz,5.4 GHz,105,Radeon,Zen 4
-AMD Ryzen 7 7800X3D,385.38,8,4.2 GHz,5 GHz,120,Radeon,Zen 5
-AMD Ryzen 7 9700X,309,8,3.8 GHz,5.5 GHz,65,Radeon,Zen 5
-AMD Ryzen 7 9800X3D,519,8,4.7 GHz,5.2 GHz,120,Radeon,Zen 5
-AMD Ryzen 9 7900X,335.26,12,4.7 GHz,5.6 GHz,170,Radeon,Zen 4
-AMD Ryzen 9 7950X,475,16,4.5 GHz,5.7 GHz,170,Radeon,Zen 4
-AMD Ryzen 9 9900X,381.6,12,4.4 GHz,5.6 GHz,120,Radeon,Zen 5
-AMD Ryzen 9 9950X,526,16,4.3 GHz,5.7 GHz,170,Radeon,Zen 5
-AMD Ryzen 9 9950X3D,972.99,16,4.3 GHz,5.7 GHz,170,Radeon,Zen 5
-Intel Core i3-12100,113.6,4,3.3 GHz,4.1 GHz,60,Intel UHD Graphics 730,Alder Lake
-Intel Core i3-12100F,82.49,4,3.3 GHz,4.1 GHz,60,Intel UHD Graphics 730,Raptor Lake
-Intel Core i5-12400F,108.99,6,2.5 GHz,4.4 GHz,65,None,Alder Lake
-Intel Core i5-12600,271.99,6,3.3 GHz,4.8 GHz,65,Intel UHD Graphics 770,Alder Lake
-Intel Core i5-12600K,180.97,10,3.7 GHz,5.2 GHz,125,Intel UHD Graphics 770,Alder Lake
-Intel Core i5-12600KF,149.99,10,3.7 GHz,5.6 GHz,125,None,Alder Lake
-Intel Core i5-13400F,133.19,10,2.5 GHz,4.6 GHz,65,None,Raptor Lake
-Intel Core i5-14400F,129.97,10,2.5 GHz,4.7 GHz,65,None,Raptor Lake Refresh
-Intel Core i5-14600K,192.99,14,3.5 GHz,5.3 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh
-Intel Core i5-14600KF,202.3,14,3.5 GHz,5.3 GHz,125,None,Raptor Lake Refresh
-Intel Core i7-12700K,218.99,12,3.6 GHz,5 GHz,125,Intel UHD Graphics 770,Alder Lake
-Intel Core i7-12700KF,189,12,3.6 GHz,5 GHz,125,None,Alder Lake
-Intel Core i7-13700K,364.91,16,3.4 GHz,5.4 GHz,125,Intel UHD Graphics 770,Raptor Lake
-Intel Core i7-14700F,319.95,20,2.1 GHz,5.2 GHz,65,None,Raptor Lake
-Intel Core i7-14700K,329.97,20,3.4 GHz,5.6 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh
-Intel Core i7-14700KF,319,20,3.5 GHz,5.3 GHz,125,None,Raptor Lake Refresh
-Intel Core i9-12900F,391.4,16,2.4 GHz,5.1 GHz,65,Intel UHD Graphics 770,Alder Lake
-Intel Core i9-12900K,309.99,16,3.2 GHz,5.2 GHz,125,Intel UHD Graphics 770,Alder Lake
-Intel Core i9-13900F,359.89,16,2.4 GHz,5.1 GHz,65,Intel UHD Graphics 770,Alder Lake
-Intel Core i9-13900K,409.99,24,3 GHz,5.8 GHz,125,Intel UHD Graphics 770,Raptor Lake
-Intel Core i9-14900K,412,24,3.2 GHz,6 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh
-Intel Core i9-14900KF,439.99,24,3.6 GHz,5.8 GHz,125,None,Raptor Lake
-Intel Core i9-14900KS,654.99,24,3.2 GHz,6.2 GHz,150,Intel UHD Graphics 770,Raptor Lake
-Intel Core Ultra 5 225,246,10,3.3 GHz,4.9 GHz,65,Intel Xe,Arrow Lake
-Intel Core Ultra 5 225F,231,10,3.3 GHz,4.9 GHz,65,None,Arrow Lake
-Intel Core Ultra 5 235,257,14,3.4 GHz,5 GHz,125,Intel Xe,Arrow Lake
-Intel Core Ultra 5 245K,269.99,10,3.3 GHz,5.2 GHz,125,Intel Xe,Arrow Lake
-Intel Core Ultra 5 245KF,311.26,10,3.3 GHz,5.5 GHz,125,None,Arrow Lake
-Intel Core Ultra 5 245KF,284.99,10,4.2 GHz,5.2 GHz,125,None,Arrow Lake
-Intel Core Ultra 7 265,349.99,20,2.4 GHz,5.3 GHz,65,Intel Xe,Arrow Lake
-Intel Core Ultra 7 265F,339.99,20,2.4 GHz,5.3 GHz,65,None,Arrow Lake
-Intel Core Ultra 7 265K,303.58,20,2.4 GHz,5.3 GHz,125,Intel Xe,Arrow Lake
-Intel Core Ultra 9 285,539.99,24,2.5 GHz,5.6 GHz,125,Intel Xe,Arrow Lake
-Intel Core Ultra 9 285K,588.99,24,2.5 GHz,5.6 GHz,125,Intel Xe,Arrow Lake
+CPU Name,Price (USD),Core Count,Base Clock,Boost Clock,TDP,Integrated Graphics,Microarchitecture,Socket
+AMD Ryzen 5 7500F,143,6,3.7 GHz,5 GHz,65,None,Zen 4,AM5
+AMD Ryzen 5 7600,198.87,6,3.8 GHz,5.1 GHz,65,Radeon,Zen 4,AM5
+AMD Ryzen 5 7600X,205.3,6,4.7 GHz,5.3 GHz,105,Radeon,Zen 4,AM5 
+AMD Ryzen 5 8500G,181.22,6,4.1 GHz,5 GHz,65,Radeon 740M,Zen 4,AM5   
+AMD Ryzen 5 9600X,208,6,3.9 GHz,5.4 GHz,65,Radeon,Zen 5,AM5 
+AMD Ryzen 7 7700,270,8,3.6 GHz,5.3 GHz,65,Radeon,Zen 4,AM5 
+AMD Ryzen 7 7700X,282.14,8,4.5 GHz,5.4 GHz,105,Radeon,Zen 4,AM5 
+AMD Ryzen 7 7800X3D,385.38,8,4.2 GHz,5 GHz,120,Radeon,Zen 5,AM5 
+AMD Ryzen 7 9700X,309,8,3.8 GHz,5.5 GHz,65,Radeon,Zen 5,AM5 
+AMD Ryzen 7 9800X3D,519,8,4.7 GHz,5.2 GHz,120,Radeon,Zen 5,AM5 
+AMD Ryzen 9 7900X,335.26,12,4.7 GHz,5.6 GHz,170,Radeon,Zen 4,AM5 
+AMD Ryzen 9 7950X,475,16,4.5 GHz,5.7 GHz,170,Radeon,Zen 4,AM5 
+AMD Ryzen 9 9900X,381.6,12,4.4 GHz,5.6 GHz,120,Radeon,Zen 5,AM5 
+AMD Ryzen 9 9950X,526,16,4.3 GHz,5.7 GHz,170,Radeon,Zen 5,AM5 
+AMD Ryzen 9 9950X3D,972.99,16,4.3 GHz,5.7 GHz,170,Radeon,Zen 5,AM5 
+Intel Core i3-12100,113.6,4,3.3 GHz,4.1 GHz,60,Intel UHD Graphics 730,Alder Lake,LGA 1700
+Intel Core i3-12100F,82.49,4,3.3 GHz,4.1 GHz,60,Intel UHD Graphics 730,Raptor Lake,LGA 1700
+Intel Core i5-12400F,108.99,6,2.5 GHz,4.4 GHz,65,None,Alder Lake,LGA 1700
+Intel Core i5-12600,271.99,6,3.3 GHz,4.8 GHz,65,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i5-12600K,180.97,10,3.7 GHz,5.2 GHz,125,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i5-12600KF,149.99,10,3.7 GHz,5.6 GHz,125,None,Alder Lake,LGA 1700
+Intel Core i5-13400F,133.19,10,2.5 GHz,4.6 GHz,65,None,Raptor Lake,LGA 1700
+Intel Core i5-14400F,129.97,10,2.5 GHz,4.7 GHz,65,None,Raptor Lake Refresh,LGA 1700
+Intel Core i5-14600K,192.99,14,3.5 GHz,5.3 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh,LGA 1700
+Intel Core i5-14600KF,202.3,14,3.5 GHz,5.3 GHz,125,None,Raptor Lake Refresh,LGA 1700
+Intel Core i7-12700K,218.99,12,3.6 GHz,5 GHz,125,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i7-12700KF,189,12,3.6 GHz,5 GHz,125,None,Alder Lake,LGA 1700
+Intel Core i7-13700K,364.91,16,3.4 GHz,5.4 GHz,125,Intel UHD Graphics 770,Raptor Lake,LGA 1700
+Intel Core i7-14700F,319.95,20,2.1 GHz,5.2 GHz,65,None,Raptor Lake,LGA 1700
+Intel Core i7-14700K,329.97,20,3.4 GHz,5.6 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh,LGA 1700
+Intel Core i7-14700KF,319,20,3.5 GHz,5.3 GHz,125,None,Raptor Lake Refresh,LGA 1700
+Intel Core i9-12900F,391.4,16,2.4 GHz,5.1 GHz,65,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i9-12900K,309.99,16,3.2 GHz,5.2 GHz,125,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i9-13900F,359.89,16,2.4 GHz,5.1 GHz,65,Intel UHD Graphics 770,Alder Lake,LGA 1700
+Intel Core i9-13900K,409.99,24,3 GHz,5.8 GHz,125,Intel UHD Graphics 770,Raptor Lake,LGA 1700
+Intel Core i9-14900K,412,24,3.2 GHz,6 GHz,125,Intel UHD Graphics 770,Raptor Lake Refresh,LGA 1700
+Intel Core i9-14900KF,439.99,24,3.6 GHz,5.8 GHz,125,None,Raptor Lake,LGA 1700
+Intel Core i9-14900KS,654.99,24,3.2 GHz,6.2 GHz,150,Intel UHD Graphics 770,Raptor Lake,LGA 1700
+Intel Core Ultra 5 225,246,10,3.3 GHz,4.9 GHz,65,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 5 225F,231,10,3.3 GHz,4.9 GHz,65,None,Arrow Lake,LGA 1851
+Intel Core Ultra 5 235,257,14,3.4 GHz,5 GHz,125,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 5 245K,269.99,10,3.3 GHz,5.2 GHz,125,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 5 245KF,311.26,10,3.3 GHz,5.5 GHz,125,None,Arrow Lake,LGA 1851
+Intel Core Ultra 5 245KF,284.99,10,4.2 GHz,5.2 GHz,125,None,Arrow Lake,LGA 1851
+Intel Core Ultra 7 265,349.99,20,2.4 GHz,5.3 GHz,65,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 7 265F,339.99,20,2.4 GHz,5.3 GHz,65,None,Arrow Lake,LGA 1851
+Intel Core Ultra 7 265K,303.58,20,2.4 GHz,5.3 GHz,125,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 9 285,539.99,24,2.5 GHz,5.6 GHz,125,Intel Xe,Arrow Lake,LGA 1851
+Intel Core Ultra 9 285K,588.99,24,2.5 GHz,5.6 GHz,125,Intel Xe,Arrow Lake,LGA 1851

@@ -165,20 +165,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check CPU and motherboard compatibility
         if (selectedComponents.cpu && selectedComponents.motherboard) {
             try {
-                // Use the server-side compatibility check
-                const response = await fetch(`/api/compatibility/${selectedComponents.cpu.id}`);
-                const compatibilityData = await response.json();
+                // Use direct endpoint to check compatibility
+                const response = await fetch('/api/check-compatibility', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cpu: selectedComponents.cpu,
+                        motherboard: selectedComponents.motherboard
+                    })
+                });
                 
-                const mbCompatData = compatibilityData.find(
-                    rule => rule.type === 'motherboard' && parseInt(rule.component_id) === selectedComponents.motherboard.id
-                );
+                const result = await response.json();
+                console.log("Compatibility check result:", result); // Debug log
                 
-                if (mbCompatData && !mbCompatData.compatible) {
+                if (!result.compatible) {
                     isCompatible = false;
-                    compatibilityIssues.push(`CPU ${selectedComponents.cpu.brand} ${selectedComponents.cpu.model} is not compatible with motherboard socket ${selectedComponents.motherboard.specs.socket}`);
+                    const cpuName = `${selectedComponents.cpu.brand} ${selectedComponents.cpu.model}`;
+                    const cpuSocket = selectedComponents.cpu.specs.socket;
+                    const mbSocket = selectedComponents.motherboard.specs.socket;
+                    
+                    compatibilityIssues.push(`CPU ${cpuName} requires ${cpuSocket} socket but motherboard has ${mbSocket} socket`);
                 }
             } catch (error) {
-                console.error('Error checking CPU compatibility:', error);
+                console.error('Error checking compatibility:', error);
             }
         }
         

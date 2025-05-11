@@ -1,145 +1,56 @@
-{% block title %}MiniRig - ITX PC Build Tool{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/build.css') }}">
-{% endblock %}
-
-{% block content %}
-<!-- Page Title -->
-<section class="page-title">
-    <h1>Build Your ITX PC</h1>
-    <p>Select compatible components for your small form factor build with our interactive tool</p>
-</section>
-
-<!-- Build Tool -->
-<div class="build-container">
-    <!-- Component Selection -->
-    <div class="component-selection">
-        <h2>Select Components</h2>
-        
-        <div class="component-category" id="case-category">
-            <h3>Case</h3>
-            <select id="case-select">
-                <option value="">Select a Case</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="motherboard-category">
-            <h3>Motherboard</h3>
-            <select id="motherboard-select">
-                <option value="">Select a Motherboard</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="cpu-category">
-            <h3>CPU</h3>
-            <select id="cpu-select">
-                <option value="">Select a CPU</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="cooler-category">
-            <h3>CPU Cooler</h3>
-            <select id="cooler-select">
-                <option value="">Select a CPU Cooler</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="memory-category">
-            <h3>Memory</h3>
-            <select id="memory-select">
-                <option value="">Select Memory</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="storage-category">
-            <h3>Storage</h3>
-            <select id="storage-select">
-                <option value="">Select Storage</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="gpu-category">
-            <h3>Graphics Card</h3>
-            <select id="gpu-select">
-                <option value="">Select a Graphics Card</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
-        
-        <div class="component-category" id="psu-category">
-            <h3>Power Supply</h3>
-            <select id="psu-select">
-                <option value="">Select a Power Supply</option>
-                <!-- Options will be populated by JavaScript -->
-            </select>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MiniRig - ITX PC Building Made Simple{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="{{ url_for('index') }}" class="logo">MiniRig</a>
+        <nav>
+            <ul>
+              <li>
+                <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('recommend') }}" class="{% if request.endpoint == 'recommend' %}active{% endif %}">
+                  Recommend Build
+                </a>
+              </li>
+              <li>
+                <a href="{{ url_for('build') }}" class="{% if request.endpoint == 'build' %}active{% endif %}">
+                  Component Picker
+                </a>
+              </li>
+            </ul>
+          </nav>
+    </header>
+    
+    {% block content %}{% endblock %}
+    
+    <!-- Go Back Button -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 99;">
+        <button onclick="window.history.back()" class="cta-button" style="background-color: #000; color: #fff;">Go Back</button>
     </div>
     
-    <!-- Build Summary -->
-    <div class="build-summary">
-        <h2>Your Build</h2>
-        
-        <div class="compatibility-status">
-            <h3>Compatibility Check</h3>
-            <p id="compatibility-message">Select components to check compatibility</p>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MiniRig. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
         </div>
-        
-        <div class="selected-components" id="selected-components-list">
-            <!-- Selected components will be displayed here via JavaScript -->
-        </div>
-        
-        <div class="total-price">
-            <p>Estimated Total: <span id="total-price">$0.00</span></p>
-        </div>
-        
-        <div class="build-name-container">
-            <h3>Name Your Build</h3>
-            <input type="text" id="build-name" placeholder="My Awesome ITX Build">
-        </div>
-        
-        <div class="action-buttons">
-            <button class="action-button save-button" id="save-build">Save Build</button>
-            <button class="action-button clear-button" id="clear-build">Clear All</button>
-            <button class="action-button load-button" id="load-build">Load Build</button>
-        </div>
-        
-        <!-- Share Code Display -->
-        <div id="share-code-display" class="share-code-container">
-            <p>Your build has been saved. Share code: <span id="share-code-text" class="share-code"></span></p>
-        </div>
-    </div>
-    
-    <!-- Recommendations -->
-    <div class="recommendations">
-        <h2>Recommended Components</h2>
-        <p>Based on your current selections, we recommend these components:</p>
-        
-        <div class="recommendation-grid" id="recommendations-container">
-            <!-- Recommendations will be displayed here via JavaScript -->
-        </div>
-        <p id="no-recommendations">Start selecting components to see recommendations</p>
-    </div>
-    
-    <!-- Load Build Modal -->
-    <div id="load-build-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Load a Saved Build</h2>
-            <p>Enter the share code for the build you want to load:</p>
-            <input type="text" id="share-code-input" placeholder="Enter share code">
-            <button id="load-code-button">Load</button>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    </footer>
 
-{% block extra_js %}
-<script src="{{ url_for('static', filename='js/build.js') }}"></script>
-{% endblock %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
