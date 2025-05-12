@@ -4,7 +4,6 @@ import os
 import json
 import random
 import string
-from data.gpu_specifications import GPU_SPECS, CPU_TDP_ESTIMATES, COMPONENT_POWER_ESTIMATES
 
 app = Flask(__name__)
 
