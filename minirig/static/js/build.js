@@ -178,15 +178,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 const result = await response.json();
-                console.log("Compatibility check result:", result); // Debug log
                 
                 if (!result.compatible) {
                     isCompatible = false;
                     const cpuName = `${selectedComponents.cpu.brand} ${selectedComponents.cpu.model}`;
-                    const cpuSocket = selectedComponents.cpu.specs.socket;
-                    const mbSocket = selectedComponents.motherboard.specs.socket;
                     
-                    compatibilityIssues.push(`CPU ${cpuName} requires ${cpuSocket} socket but motherboard has ${mbSocket} socket`);
+                    // Use the server-provided error message
+                    if (result.message) {
+                        compatibilityIssues.push(result.message);
+                    } else {
+                        const cpuSocket = selectedComponents.cpu.specs.socket;
+                        const mbSocket = selectedComponents.motherboard.specs.socket;
+                        compatibilityIssues.push(`CPU ${cpuName} requires ${cpuSocket} socket but motherboard has ${mbSocket} socket`);
+                    }
                 }
             } catch (error) {
                 console.error('Error checking compatibility:', error);

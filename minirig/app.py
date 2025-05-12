@@ -193,10 +193,20 @@ def get_components_by_type(component_type):
 # CPU-Motherboard compatibility check
 def check_cpu_motherboard_compatibility(cpu, motherboard):
     # Extract socket from motherboard and CPU
-    motherboard_socket = motherboard.get('specs', {}).get('socket', '')
-    cpu_socket = cpu.get('specs', {}).get('socket', '')
+    motherboard_socket = motherboard.get('specs', {}).get('socket', '').replace(' ', '').upper()
+    cpu_socket = cpu.get('specs', {}).get('socket', '').replace(' ', '').upper()
     
-    # Direct socket comparison
+    # Extract CPU brand
+    cpu_brand = cpu.get('brand', '')
+    
+    # Basic brand-socket validation
+    if 'AMD' in cpu_brand and not motherboard_socket.startswith('AM'):
+        return False
+    
+    if 'INTEL' in cpu_brand.upper() and not (motherboard_socket.startswith('LGA') or motherboard_socket.startswith('BGA')):
+        return False
+        
+    # Direct socket comparison (normalized)
     return motherboard_socket == cpu_socket
 
 # Compatibility check API
@@ -259,21 +269,38 @@ def direct_compatibility_check():
     if not data or 'cpu' not in data or 'motherboard' not in data:
         return jsonify({'compatible': False, 'error': 'Missing CPU or motherboard data'})
     
-    cpu_socket = data['cpu'].get('specs', {}).get('socket', '')
-    mb_socket = data['motherboard'].get('specs', {}).get('socket', '')
+    cpu = data['cpu']
+    motherboard = data['motherboard']
     
-    # Log the values for debugging
-    print(f"Checking compatibility: CPU socket {cpu_socket}, MB socket {mb_socket}")
+    cpu_socket = cpu.get('specs', {}).get('socket', '').replace(' ', '').upper()
+    mb_socket = motherboard.get('specs', {}).get('socket', '').replace(' ', '').upper()
+    cpu_brand = cpu.get('brand', '')
+    cpu_name = f"{cpu.get('brand', '')} {cpu.get('model', '')}"
     
-    # Direct string comparison
-    is_compatible = cpu_socket == mb_socket
+    # Check brand-socket compatibility
+    message = None
+    compatible = True
+    
+    if 'AMD' in cpu_brand and not mb_socket.startswith('AM'):
+        compatible = False
+        message = f"CPU {cpu_name} (AMD) is not compatible with {motherboard.get('specs', {}).get('socket', '')} motherboards"
+    
+    elif 'INTEL' in cpu_brand.upper() and not (mb_socket.startswith('LGA') or mb_socket.startswith('BGA')):
+        compatible = False
+        message = f"CPU {cpu_name} (Intel) is not compatible with {motherboard.get('specs', {}).get('socket', '')} motherboards"
+    
+    # If brand is compatible, check specific socket match
+    elif cpu_socket != mb_socket:
+        compatible = False
+        message = f"CPU {cpu_name} requires {cpu.get('specs', {}).get('socket', '')} socket but motherboard has {motherboard.get('specs', {}).get('socket', '')} socket"
     
     return jsonify({
-        'compatible': is_compatible,
-        'message': f"CPU socket: {cpu_socket}, Motherboard socket: {mb_socket}",
+        'compatible': compatible,
+        'message': message,
         'debug': {
             'cpu_socket': cpu_socket,
-            'mb_socket': mb_socket
+            'mb_socket': mb_socket,
+            'cpu_brand': cpu_brand
         }
     })
 
