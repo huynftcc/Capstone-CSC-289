@@ -472,37 +472,6 @@ function clearBuild(showAlert = true) {
     }
 }
 
-// Add a refresh button for GPU data (for debugging)
-function addRefreshGPUButton() {
-    const gpuCategory = document.getElementById('gpu-category');
-    if (!gpuCategory) return;
-    
-    const refreshButton = document.createElement('button');
-    refreshButton.textContent = "Refresh GPU List";
-    refreshButton.style.marginTop = "10px";
-    refreshButton.style.padding = "5px 10px";
-    refreshButton.addEventListener('click', () => {
-        fetch('/api/components/gpu', {
-            cache: 'no-store',
-            headers: {
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Refreshed GPU data:", data);
-            if (data.length > 0) {
-                console.log("First GPU chip:", data[0].specs?.chip);
-                populateSelectOptions('gpu', data);
-                alert(`Refreshed ${data.length} GPUs`);
-            }
-        });
-    });
-    
-    gpuCategory.appendChild(refreshButton);
-}
-
 // Call this function when the page loads
 setTimeout(addRefreshGPUButton, 1000);
 
