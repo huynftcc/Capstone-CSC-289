@@ -26,6 +26,14 @@ function loadComponents() {
         .then(data => {
             componentsData[type] = data;
             populateSelectOptions(type, data);
+            if (type === 'gpu') {
+                console.log("GPU data loaded:", data.length, "items");
+                // Log a few GPU items to debug
+                if (data.length > 0) {
+                    console.log("Sample GPU data:", data[0]);
+                    console.log("GPUs with chip data:", data.filter(gpu => gpu.specs && gpu.specs.chip).length);
+                }
+            }
         })
     );
     
@@ -62,14 +70,7 @@ function populateSelectOptions(type, components) {
             // Include chipset information for GPUs
             const chipset = component.specs?.chip || 'Unknown';
             displayText = `${component.brand} ${component.model} (${chipset}) - $${component.price.toFixed(2)}`;
-        } else if (type === 'storage') {
-            // Include capacity information for storage
-            const capacity = component.specs?.capacity || 'Unknown';
-            displayText = `${component.brand} ${component.model} (${capacity}) - $${component.price.toFixed(2)}`;
-        } else if (type === 'psu') {
-            // Include wattage information for power supplies
-            const wattage = component.specs?.wattage || 'Unknown';
-            displayText = `${component.brand} ${component.model} (${wattage}) - $${component.price.toFixed(2)}`;
+            console.log("Created GPU option:", displayText);
         } else {
             displayText = `${component.brand} ${component.model} - $${component.price.toFixed(2)}`;
         }
@@ -285,19 +286,12 @@ function updateBuildSummary() {
             const componentName = document.createElement('div');
             componentName.className = 'component-name';
             
-            // Add specific info based on component type
-            let displayName = `${type.charAt(0).toUpperCase() + type.slice(1)}: ${component.brand} ${component.model}`;
-            
-            // Add additional info for specific component types
+            // Add chipset info for GPUs
             if (type === 'gpu' && component.specs?.chip) {
-                displayName += ` (${component.specs.chip})`;
-            } else if (type === 'storage' && component.specs?.capacity) {
-                displayName += ` (${component.specs.capacity})`;
-            } else if (type === 'psu' && component.specs?.wattage) {
-                displayName += ` (${component.specs.wattage})`;
+                componentName.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}: ${component.brand} ${component.model} (${component.specs.chip})`;
+            } else {
+                componentName.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}: ${component.brand} ${component.model}`;
             }
-            
-            componentName.textContent = displayName;
             
             // Component price div
             const componentPrice = document.createElement('div');
@@ -477,3 +471,55 @@ function clearBuild(showAlert = true) {
         alert("Build cleared!");
     }
 }
+
+// Add a refresh button for GPU data (for debugging)
+function addRefreshGPUButton() {
+    const gpuCategory = document.getElementById('gpu-category');
+    if (!gpuCategory) return;
+    
+    const refreshButton = document.createElement('button');
+    refreshButton.textContent = "Refresh GPU List";
+    refreshButton.style.marginTop = "10px";
+    refreshButton.style.padding = "5px 10px";
+    refreshButton.addEventListener('click', () => {
+        fetch('/api/components/gpu', {
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Refreshed GPU data:", data);
+            if (data.length > 0) {
+                console.log("First GPU chip:", data[0].specs?.chip);
+                populateSelectOptions('gpu', data);
+                alert(`Refreshed ${data.length} GPUs`);
+            }
+        });
+    });
+    
+    gpuCategory.appendChild(refreshButton);
+}
+
+// Call this function when the page loads
+setTimeout(addRefreshGPUButton, 1000);
+
+// Export a debug function to window for testing in console
+window.debugGPUs = function() {
+    const gpuSelect = document.getElementById('gpu-select');
+    console.log("GPU select options:", gpuSelect?.options.length);
+    
+    if (gpuSelect && gpuSelect.options.length > 0) {
+        console.log("First 3 GPU options:");
+        for (let i = 0; i < Math.min(3, gpuSelect.options.length); i++) {
+            console.log(`${i}: ${gpuSelect.options[i].textContent}`);
+        }
+    }
+    
+    console.log("GPU data in memory:", componentsData.gpu?.length);
+    if (componentsData.gpu && componentsData.gpu.length > 0) {
+        console.log("Sample GPU data:", componentsData.gpu[0]);
+    }
+};
