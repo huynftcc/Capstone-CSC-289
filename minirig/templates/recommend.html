@@ -2,124 +2,556 @@
 
 {% block title %}MiniRig – What we recommend{% endblock %}
 
-{% block content %}
-  <section class="page-title">
-    <h1>Build that we recommend</h1>
-    <p> </p>
-  </section>
-
-  <div class="container main-content">
-    <div class="cards-grid">
-      <!-- Low Budget Build -->
-      <div class="card">
-          <div class="card-body" style="margin-left: 15%; width: 80%;">
-            <img src="{{ url_for('static', filename='img/cases/Fractal_Terra.jpg') }}" alt="Fractal Design Terra" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
-            
-            <h3 class="card-title">Budget AMD Build</h3>
-            <ul>
-                <li>
-                    <strong>CPU:</strong> AMD Ryzen 5 9600X - $209.95
-                </li>
-                <li>
-                    <strong>Motherboard:</strong> ASRock A620I LIGHTNING WIFI - $139.99
-                </li>
-                <li>
-                    <strong>Memory:</strong> Team Group T-CREATE EXPERT 32GB - $92.99
-                </li>
-                <li>
-                    <strong>GPU:</strong> GUNNIR Intel Arc B580 Index 12GB - $341.00
-                </li>
-                <li>
-                    <strong>Case:</strong> Fractal Design Terra Graphite Mini-ITX - $179.99
-                </li>
-                <li>
-                    <strong>PSU:</strong> LIAN LI SP850 - $138.99
-                </li>
-                <li>
-                    <strong>Storage:</strong> Crucial P310 1TB NVMe SSD - $73.55
-                </li>
-                <li>
-                    <strong>CPU Cooler:</strong> AXP90-X47 Full Cooper - $42.95
-                </li>
-                <li>
-                    <strong>Total:</strong>  $1,219.41
-                </li>
-            </ul>
-          </div>
-        </div>
-
-        
-      <div class="card">
-          <div class="card-body" style="margin-left: 15%; width: 80%;">
-            <img src="{{ url_for('static', filename='img/cases/Fractal_Terra_Green.jpg') }}" alt="Fractal Design Terra Green" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
-            
-            <h3 class="card-title">Mid Range Build</h3>
-            <ul>
-                <li>
-                    <strong>CPU:</strong> AMD Ryzen 7 9700X- $309 or Intel Core i7 14900K
-                </li>
-                <li>
-                    <strong>Motherboard:</strong> ASUS ROG STRIX B650E-I Gaming WiFi - $229.99 or ASUS ROG Strix B760-I Gaming WiFi Intel (-$10)
-                </li>
-                <li>
-                    <strong>Memory:</strong> T-Create Expert CL32 Overclocking 10L DDR5 32GB - $96.99
-                </li>
-                <li>
-                    <strong>GPU:</strong> Gigabyte Radeon RX 9070XT 16GB - $729.99 or MSI RTX 5070 TI 16G VENTUS 3X OC (+$170)
-                </li>
-                <li>
-                    <strong>Case:</strong> Fractal Design Terra Green Mini-ITX - $179.99
-                </li>
-                <li>
-                    <strong>PSU:</strong> Cosair SF750 80 Plus Platinum (2024) - $179.99
-                </li>
-                <li>
-                    <strong>Storage:</strong> WD_BLACK 2TB SN850X NVMe - $151.99
-                </li>
-                <li>
-                    <strong>CPU Cooler:</strong> AXP90-X53 Full Cooper - $35.90
-                </li>
-                <li>
-                    <strong>Total:</strong> $1,913.85
-                </li>
-            </ul>
-          </div>
-        </div>
+{% block extra_css %}
+<style>
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
   
-      <div class="card">
-        <div class="card-body" style="margin-left: 15%; width: 80%;">
-          <img src="{{ url_for('static', filename='img/cases/Formd T1.png') }}" alt="Formd T1" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
-          
-          <h3 class="card-title">High End Build</h3>
-          <ul>
-              <li>
-                  <strong>CPU:</strong> AMD Ryzen 7 9800X3D - $479.99 Or Intel Core i9 14900K (-$79.99)
-              </li>
-              <li>
-                  <strong>Motherboard:</strong> ASUS ROG Strix B850-I Gaming WiFi AMD - $299.99 or ASUS ROG Strix B760-I Gaming WiFi Intel (-$80)
-              </li>
-              <li>
-                  <strong>Memory:</strong> T-Create Expert CL32 Overclocking 10L DDR5 32GB - 96.99
-              </li>
-              <li>
-                  <strong>GPU:</strong> MSI RTX 5080 16G Ventus 3X OC Plus - $1409 or RTX 5080 Founder Edition (-$409) If you able to find one
-              </li>
-              <li>
-                  <strong>Case:</strong> Formd T1 - $215
-              </li>
-              <li>
-                  <strong>PSU:</strong> Corsair SF850 80 Plus Platinum (2024) - $199.99
-              </li>
-              <li>
-                  <strong>Storage:</strong> WD_BLACK 4TB SN850X NVMe - $284.63
-              </li>
-              <li>
-                  <strong>CPU Cooler:</strong> Cooler Master Atmos 240 - $129.99
-              </li>
-              <li>
-                  <strong>Total:</strong> $3,115.58
-              </li>
-          </ul>
-        </div>
+  .card {
+    background-color: rgba(17, 17, 17, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-header {
+    padding: 1.5rem;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-bottom: 2px solid #333;
+  }
+  
+  .card-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .card-image-container {
+    height: 250px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .card-image {
+    width: 80%;
+    height: auto;
+    object-fit: contain;
+    mix-blend-mode: normal;
+    transition: transform 0.3s;
+  }
+  
+  .card:hover .card-image {
+    transform: scale(1.05);
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .component-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .component-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .component-list li:last-child {
+    border-bottom: none;
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .component-label {
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .component-details {
+    color: #ddd;
+  }
+  
+  .alternative {
+    color: #888;
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+  
+  .total-row {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #444;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* Video Feature Section */
+  .video-feature-section {
+    width: 100%;
+    position: relative;
+    margin-top: 5rem;
+    background-color: #000;
+    overflow: hidden;
+  }
+  
+  .video-feature-container {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    min-height: 600px;
+  }
+  
+  .video-feature-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    z-index: 1;
+  }
+  
+  .video-feature-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #fff;
+  }
+  
+  .video-feature-title {
+    font-size: 8rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* BLACK BUTTON STYLING */
+  .watch-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000; /* Pure black */
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #333; /* Subtle border to make it stand out */
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .watch-button .play-icon {
+    margin-right: 0.5rem;
+  }
+  
+  .watch-button:hover {
+    background-color: #222; /* Slightly lighter black on hover */
+  }
+  
+  /* Video Modal */
+  .video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .video-container {
+    width: 80%;
+    max-width: 1000px;
+    position: relative;
+  }
+  
+  .close-video {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  
+  .video-iframe {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+  }
+  
+  .video-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Fallback video message styles */
+  .video-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .video-fallback h3 {
+    color: #fff;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .video-fallback p {
+    color: #ddd;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+
+  .youtube-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+
+  .youtube-link:hover {
+    background-color: #222;
+  }
+
+  .youtube-icon {
+    margin-right: 0.5rem;
+    color: #ff0000;
+  }
+  
+  @media (max-width: 1200px) {
+    .cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .video-feature-title {
+      font-size: 6rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .video-feature-title {
+      font-size: 4rem;
+    }
+
+    .video-fallback h3 {
+      font-size: 1.3rem;
+    }
+
+    .video-fallback p {
+      font-size: 0.9rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-title">
+  <h1>Build that we recommend</h1>
+  <p>Our expert-selected component combinations for different budgets</p>
+</section>
+
+<div class="cards-grid">
+  <!-- Low Budget Build -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Budget AMD Build</h3>
+    </div>
+    <div class="card-image-container">
+      <img src="{{ url_for('static', filename='img/cases/Fractal_Terra.jpg') }}" alt="Fractal Design Terra" class="card-image">
+    </div>
+    <div class="card-body">
+      <ul class="component-list">
+        <li>
+          <span class="component-label">CPU:</span>
+          <span class="component-details">AMD Ryzen 5 9600X - $209.95</span>
+        </li>
+        <li>
+          <span class="component-label">Motherboard:</span>
+          <span class="component-details">ASRock A620I LIGHTNING WIFI - $139.99</span>
+        </li>
+        <li>
+          <span class="component-label">Memory:</span>
+          <span class="component-details">Team Group T-CREATE EXPERT 32GB - $92.99</span>
+        </li>
+        <li>
+          <span class="component-label">GPU:</span>
+          <span class="component-details">GUNNIR Intel Arc B580 Index 12GB - $341.00</span>
+        </li>
+        <li>
+          <span class="component-label">Case:</span>
+          <span class="component-details">Fractal Design Terra Graphite Mini-ITX - $179.99</span>
+        </li>
+        <li>
+          <span class="component-label">PSU:</span>
+          <span class="component-details">LIAN LI SP850 - $138.99</span>
+        </li>
+        <li>
+          <span class="component-label">Storage:</span>
+          <span class="component-details">Crucial P310 1TB NVMe SSD - $73.55</span>
+        </li>
+        <li>
+          <span class="component-label">CPU Cooler:</span>
+          <span class="component-details">AXP90-X47 Full Cooper - $42.95</span>
+        </li>
+        <li class="total-row">
+          <span class="component-label">Total:</span>
+          <span class="component-details">$1,219.41</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Mid Range Build -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Mid Range Build</h3>
+    </div>
+    <div class="card-image-container">
+      <img src="{{ url_for('static', filename='img/cases/Fractal_Terra_Green.jpg') }}" alt="Fractal Design Terra Green" class="card-image">
+    </div>
+    <div class="card-body">
+      <ul class="component-list">
+        <li>
+          <span class="component-label">CPU:</span>
+          <span class="component-details">AMD Ryzen 7 9700X - $309.00</span>
+          <div class="alternative">or Intel Core i7 14900K</div>
+        </li>
+        <li>
+          <span class="component-label">Motherboard:</span>
+          <span class="component-details">ASUS ROG STRIX B650E-I Gaming WiFi - $229.99</span>
+          <div class="alternative">or ASUS ROG Strix B760-I Gaming WiFi (-$10)</div>
+        </li>
+        <li>
+          <span class="component-label">Memory:</span>
+          <span class="component-details">T-Create Expert CL32 DDR5 32GB - $96.99</span>
+        </li>
+        <li>
+          <span class="component-label">GPU:</span>
+          <span class="component-details">Gigabyte Radeon RX 9070XT 16GB - $729.99</span>
+          <div class="alternative">or MSI RTX 5070 TI 16G VENTUS 3X OC (+$170)</div>
+        </li>
+        <li>
+          <span class="component-label">Case:</span>
+          <span class="component-details">Fractal Design Terra Green Mini-ITX - $179.99</span>
+        </li>
+        <li>
+          <span class="component-label">PSU:</span>
+          <span class="component-details">Corsair SF750 80 Plus Platinum (2024) - $179.99</span>
+        </li>
+        <li>
+          <span class="component-label">Storage:</span>
+          <span class="component-details">WD_BLACK 2TB SN850X NVMe - $151.99</span>
+        </li>
+        <li>
+          <span class="component-label">CPU Cooler:</span>
+          <span class="component-details">AXP90-X53 Full Cooper - $35.90</span>
+        </li>
+        <li class="total-row">
+          <span class="component-label">Total:</span>
+          <span class="component-details">$1,913.85</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- High End Build -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">High End Build</h3>
+    </div>
+    <div class="card-image-container">
+      <img src="{{ url_for('static', filename='img/cases/Formd T1.png') }}" alt="Formd T1" class="card-image">
+    </div>
+    <div class="card-body">
+      <ul class="component-list">
+        <li>
+          <span class="component-label">CPU:</span>
+          <span class="component-details">AMD Ryzen 7 9800X3D - $479.99</span>
+          <div class="alternative">or Intel Core i9 14900K (-$79.99)</div>
+        </li>
+        <li>
+          <span class="component-label">Motherboard:</span>
+          <span class="component-details">ASUS ROG Strix B850-I Gaming WiFi - $299.99</span>
+          <div class="alternative">or ASUS ROG Strix B760-I Gaming WiFi (-$80)</div>
+        </li>
+        <li>
+          <span class="component-label">Memory:</span>
+          <span class="component-details">T-Create Expert CL32 DDR5 32GB - $96.99</span>
+        </li>
+        <li>
+          <span class="component-label">GPU:</span>
+          <span class="component-details">MSI RTX 5080 16G Ventus 3X OC Plus - $1,409.00</span>
+          <div class="alternative">or RTX 5080 Founder Edition (-$409) if available</div>
+        </li>
+        <li>
+          <span class="component-label">Case:</span>
+          <span class="component-details">Formd T1 - $215.00</span>
+        </li>
+        <li>
+          <span class="component-label">PSU:</span>
+          <span class="component-details">Corsair SF850 80 Plus Platinum (2024) - $199.99</span>
+        </li>
+        <li>
+          <span class="component-label">Storage:</span>
+          <span class="component-details">WD_BLACK 4TB SN850X NVMe - $284.63</span>
+        </li>
+        <li>
+          <span class="component-label">CPU Cooler:</span>
+          <span class="component-details">Cooler Master Atmos 240 - $129.99</span>
+        </li>
+        <li class="total-row">
+          <span class="component-label">Total:</span>
+          <span class="component-details">$3,115.58</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Video Feature Section -->
+<section class="video-feature-section">
+  <!-- Background image with overlay -->
+  <img src="{{ url_for('static', filename='img/cases/Formd T1.png') }}" alt="Background" class="video-feature-bg">
+  
+  <!-- Video feature content -->
+  <div class="video-feature-container">
+    <div class="video-feature-content">
+      <h2 class="video-feature-title">ITX</h2>
+      <button class="watch-button" id="watch-video-btn">
+        <span class="play-icon">▶</span> WATCH
+      </button>
+      <p style="margin-top: 1.5rem; font-size: 1.1rem; color: #ddd;">
+        Learn about the revolutionary FormD T1 case design
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Video Modal with Direct YouTube Link -->
+<div class="video-modal" id="video-modal">
+  <div class="video-container">
+    <button class="close-video" id="close-video-btn">&times;</button>
+    <div class="video-iframe">
+      <!-- Fallback content instead of iframe -->
+      <div class="video-fallback">
+        <h3>FormD T1 Video</h3>
+        <p>
+          YouTube embedding is not available in local development environment.
+          Click the button below to watch the video directly on YouTube.
+        </p>
+        <a href="https://youtu.be/i_Epp83VOBI?si=h7fzdBC0gsaSfg-_" 
+           target="_blank" rel="noopener" class="youtube-link">
+          <span class="youtube-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.54 6.42C22.4212 5.94541 22.1793 5.51057 21.8387 5.15941C21.498 4.80824 21.0708 4.55318 20.6 4.42C18.88 4 12 4 12 4C12 4 5.12 4 3.4 4.46C2.92922 4.59318 2.50197 4.84824 2.16134 5.19941C1.82071 5.55057 1.57878 5.98541 1.46 6.46C1.14521 8.20556 0.991235 9.97631 0.999999 11.75C0.988374 13.537 1.14236 15.3213 1.46 17.08C1.59096 17.5398 1.83831 17.9581 2.17214 18.2945C2.50597 18.6308 2.92518 18.8738 3.38 19C5.1 19.46 12 19.46 12 19.46C12 19.46 18.88 19.46 20.6 19C21.0708 18.8668 21.498 18.6118 21.8387 18.2606C22.1793 17.9094 22.4212 17.4746 22.54 17C22.8524 15.2676 23.0063 13.5103 23 11.75C23.0116 9.96295 22.8576 8.1787 22.54 6.42Z" fill="#FF0000"/>
+              <path d="M9.75 15.02L15.5 11.75L9.75 8.48001V15.02Z" fill="white"/>
+            </svg>
+          </span>
+          Open on YouTube
+        </a>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Video Modal -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const watchButton = document.getElementById('watch-video-btn');
+    const videoModal = document.getElementById('video-modal');
+    const closeButton = document.getElementById('close-video-btn');
+    
+    // Open modal when WATCH button is clicked
+    watchButton.addEventListener('click', function() {
+      videoModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+    });
+    
+    // Close modal when close button is clicked
+    closeButton.addEventListener('click', function() {
+      videoModal.style.display = 'none';
+      document.body.style.overflow = ''; // Enable scrolling
+    });
+    
+    // Close modal when clicking outside the video
+    videoModal.addEventListener('click', function(e) {
+      if (e.target === videoModal) {
+        videoModal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+  });
+</script>
 {% endblock %}

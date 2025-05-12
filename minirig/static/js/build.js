@@ -1,826 +1,479 @@
-// Build tool JavaScript file for MiniRig website
+// Store all component data
+let componentsData = {};
+let selectedComponents = {};
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Cache DOM elements
-    const caseSelect = document.getElementById('case-select');
-    const motherboardSelect = document.getElementById('motherboard-select');
-    const cpuSelect = document.getElementById('cpu-select');
-    const coolerSelect = document.getElementById('cooler-select');
-    const memorySelect = document.getElementById('memory-select');
-    const storageSelect = document.getElementById('storage-select');
-    const gpuSelect = document.getElementById('gpu-select');
-    const psuSelect = document.getElementById('psu-select');
-    
-    const compatibilityMessage = document.getElementById('compatibility-message');
-    const selectedComponentsList = document.getElementById('selected-components-list');
-    const totalPriceElement = document.getElementById('total-price');
-    const recommendationsContainer = document.getElementById('recommendations-container');
-    const noRecommendations = document.getElementById('no-recommendations');
-    
-    const saveBuildButton = document.getElementById('save-build');
-    const clearBuildButton = document.getElementById('clear-build');
-    const loadBuildButton = document.getElementById('load-build');
-    const buildNameInput = document.getElementById('build-name');
-    
-    // Component data
-    let components = {
-        case: [],
-        motherboard: [],
-        cpu: [],
-        cooler: [],
-        memory: [],
-        storage: [],
-        gpu: [],
-        psu: []
-    };
-    
-    // Selected components
-    let selectedComponents = {
-        case: null,
-        motherboard: null,
-        cpu: null,
-        cooler: null,
-        memory: null,
-        storage: null,
-        gpu: null,
-        psu: null
-    };
-    
-    // Compatibility status
-    let isCompatible = true;
-    let compatibilityIssues = [];
-    
-    // Fetch components from API
-    async function fetchComponents() {
-        try {
-            // Fetch all components
-            const response = await fetch('/api/components');
-            const data = await response.json();
-            
-            // Sort components by type
-            data.forEach(component => {
-                if (components[component.type]) {
-                    components[component.type].push(component);
-                }
-            });
-            
-            // Sort components by price (low to high)
-            for (const type in components) {
-                if (components[type].length > 0) {
-                    components[type].sort((a, b) => a.price - b.price);
-                }
-            }
-            
-            // Populate dropdowns
-            populateDropdowns();
-        } catch (error) {
-            console.error('Error fetching components:', error);
-        }
-    }
-    
-    // Populate component dropdowns
-    function populateDropdowns() {
-        // Case dropdown
-        components.case.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
-            caseSelect.appendChild(option);
-        });
-        
-        // Motherboard dropdown
-        components.motherboard.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} (${item.specs.socket}) - $${item.price.toFixed(2)}`;
-            motherboardSelect.appendChild(option);
-        });
-        
-        // CPU dropdown
-        components.cpu.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
-            cpuSelect.appendChild(option);
-        });
-        
-        // CPU Cooler dropdown
-        components.cooler.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
-            coolerSelect.appendChild(option);
-        });
-        
-        // Memory dropdown
-        components.memory.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} (${item.specs.speed}, ${item.specs.modules}) - $${item.price.toFixed(2)}`;
-            memorySelect.appendChild(option);
-        });
-        
-        // Storage dropdown
-        components.storage.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            
-            // Get capacity and form factor from specs
-            const capacity = item.specs && item.specs.capacity ? item.specs.capacity : '';
-            const formFactor = item.specs && item.specs.form_factor ? item.specs.form_factor : '';
-            
-            // Create a more informative display string
-            option.textContent = `${item.brand} ${item.model} - ${capacity} ${formFactor} - $${item.price.toFixed(2)}`;
-            
-            storageSelect.appendChild(option);
-        });
-        
-        // GPU dropdown
-        components.gpu.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            
-            // Try to extract GPU model and VRAM from specs
-            let gpuModel = '';
-            let vramSize = '';
-            
-            // Extract from specs if available
-            if (item.specs) {
-                if (item.specs.chip) {
-                    gpuModel = item.specs.chip;
-                }
-                if (item.specs.memory) {
-                    vramSize = item.specs.memory;
-                }
-            }
-            
-            // If not in specs, try to extract from model name
-            if (!gpuModel || !vramSize) {
-                const fullName = `${item.brand} ${item.model}`;
-                
-                // Try to extract GPU model (RTX 50xx, RX 9xxx, etc.)
-                const modelMatch = fullName.match(/(RTX\s*\d{4}\s*[A-Za-z]*|RX\s*\d{4}\s*[A-Za-z]*)/i);
-                if (modelMatch) {
-                    gpuModel = modelMatch[0];
-                }
-                
-                // Try to extract VRAM (xG, xGB)
-                const vramMatch = fullName.match(/(\d+\s*[GT]B|\d+\s*G)/i);
-                if (vramMatch) {
-                    vramSize = vramMatch[0];
-                }
-            }
-            
-            // Format the display text with additional information
-            let displayText = `${item.brand} ${item.model}`;
-            
-            // Add GPU model and VRAM if available
-            if (gpuModel && vramSize) {
-                displayText = `${item.brand} ${gpuModel} ${vramSize} - ${item.model}`;
-            } else if (gpuModel) {
-                displayText = `${item.brand} ${gpuModel} - ${item.model}`;
-            } else if (vramSize) {
-                displayText = `${item.brand} ${item.model} ${vramSize}`;
-            }
-            
-            // Add price
-            displayText += ` - $${item.price.toFixed(2)}`;
-            
-            option.textContent = displayText;
-            gpuSelect.appendChild(option);
-        });
-        
-        // PSU dropdown
-        components.psu.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            
-            // Extract or find wattage information
-            let wattage = '';
-            let efficiency = '';
-            
-            // Try to get from specs
-            if (item.specs) {
-                if (item.specs.wattage) {
-                    wattage = item.specs.wattage;
-                }
-                if (item.specs.efficiency) {
-                    efficiency = item.specs.efficiency;
-                }
-            }
-            
-            // If not in specs, try to extract from model name
-            const fullName = `${item.brand} ${item.model}`;
-            
-            // Extract wattage if not already found
-            if (!wattage) {
-                const wattageMatch = fullName.match(/(\d{3,4})(?:\s*W|\s*watts|\s*watt)/i);
-                if (wattageMatch) {
-                    wattage = wattageMatch[1] + 'W';
-                }
-            }
-            
-            // Extract efficiency rating if not already found
-            if (!efficiency) {
-                // Look for common 80+ ratings
-                const efficiencyMatch = fullName.match(/(titanium|platinum|gold|silver|bronze|white)/i);
-                if (efficiencyMatch) {
-                    efficiency = efficiencyMatch[1].toUpperCase();
-                }
-            }
-            
-            // Format the display text with the additional information
-            let displayText = `${item.brand} ${item.model}`;
-            
-            // Add wattage and efficiency if available - with only one '80+'
-            let specs = '';
-            if (wattage && efficiency) {
-                specs = `${wattage} ${efficiency}`;
-            } else if (wattage) {
-                specs = `${wattage}`;
-            } else if (efficiency) {
-                specs = `80+ ${efficiency}`;
-            }
-            
-            // Add the specs to the display text - ensure we're not duplicating info already in the model name
-            if (specs) {
-                // Check if the model name already contains this information
-                const modelHasWattage = item.model.includes(wattage);
-                const modelHasEfficiency = item.model.toLowerCase().includes(efficiency.toLowerCase());
-                const modelHas80Plus = item.model.toLowerCase().includes('80+') || item.model.toLowerCase().includes('80 plus');
-                
-                // Only add the full specs if neither are in the model name
-                if (!modelHasWattage && !modelHasEfficiency) {
-                    displayText = `${item.brand} ${item.model} (${specs})`;
-                } 
-                // Add only wattage if efficiency is already in the model
-                else if (!modelHasWattage && modelHasEfficiency) {
-                    displayText = `${item.brand} ${item.model} (${wattage})`;
-                }
-                // Add only efficiency if wattage is already in the model
-                else if (modelHasWattage && !modelHasEfficiency && !modelHas80Plus) {
-                    displayText = `${item.brand} ${item.model} ${efficiency}`;
-                }
-                // Don't add parentheses if both are already in the model name
-            }
-            
-            // Add price
-            displayText += ` - $${item.price.toFixed(2)}`;
-            
-            option.textContent = displayText;
-            psuSelect.appendChild(option);
-        });
-        
-        // Memory compatibility checks
-        if (selectedComponents.motherboard && selectedComponents.memory) {
-            // Check if memory exceeds motherboard's max capacity
-            const memoryModules = selectedComponents.memory.specs.modules;
-            const memoryCapacity = parseInt(memoryModules.split('x')[1]) * parseInt(memoryModules.split('x')[0]);
-            
-            const motherboardMemMax = selectedComponents.motherboard.specs.memory_max;
-            
-            if (memoryCapacity > motherboardMemMax) {
-                isCompatible = false;
-                compatibilityIssues.push(`Memory capacity (${memoryCapacity}GB) exceeds motherboard maximum (${motherboardMemMax}GB)`);
-            }
-            
-            // Check if number of memory modules exceeds motherboard slots
-            const memoryModuleCount = parseInt(memoryModules.split('x')[0]);
-            const motherboardMemSlots = selectedComponents.motherboard.specs.memory_slots;
-            
-            if (memoryModuleCount > motherboardMemSlots) {
-                isCompatible = false;
-                compatibilityIssues.push(`Memory module count (${memoryModuleCount}) exceeds motherboard slots (${motherboardMemSlots})`);
-            }
-        }
-        
-        // Check case and GPU compatibility (simplified for demo)
-        if (selectedComponents.case && selectedComponents.gpu) {
-            // This is a simplified check - in a real implementation, you would check specific dimensions
-            // For now, let's just assume all GPUs fit in all cases
-        }
-        
-        // Update UI based on compatibility
-        updateCompatibilityUI();
-    }
-    
-    // Update UI based on compatibility results
-    function updateCompatibilityUI() {
-        const statusElement = document.querySelector('.compatibility-status');
-        
-        if (!isCompatible) {
-            statusElement.className = 'compatibility-status incompatible';
-            
-            // Display incompatibility messages
-            let message = '<strong>Incompatibility Detected:</strong> ' + 
-                        compatibilityIssues.join('<br>');
-            
-            // Add recommendations immediately after incompatibility issues
-            if (recommendationItems.length > 0) {
-                message += '<br><br><strong>Recommendations:</strong><ul>';
-                recommendationItems.forEach(item => {
-                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
-                });
-                message += '</ul>';
-            }
-            
-            compatibilityMessage.innerHTML = message;
-        } else if (compatibilityIssues.length > 0) {
-            statusElement.className = 'compatibility-status warning';
-            
-            // Display warning messages
-            let message = '<strong>Warning:</strong> ' + 
-                        compatibilityIssues.join('<br>');
-            
-            // Add recommendations after warnings
-            if (recommendationItems.length > 0) {
-                message += '<br><br><strong>Recommendations:</strong><ul>';
-                recommendationItems.forEach(item => {
-                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
-                });
-                message += '</ul>';
-            }
-            
-            compatibilityMessage.innerHTML = message;
-        } else {
-            statusElement.className = 'compatibility-status compatible';
-            
-            let message = 'All components are compatible!';
-            
-            // Add recommendations even if everything is compatible
-            if (recommendationItems.length > 0) {
-                message += '<br><br><strong>Recommendations:</strong><ul>';
-                recommendationItems.forEach(item => {
-                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
-                });
-                message += '</ul>';
-            }
-            
-            compatibilityMessage.innerHTML = message;
-        }
-    }
+// Initialize the page when it loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadComponents();
+    setupEventListeners();
+});
 
-
-    // Add this variable at the top with other global variables
-    let recommendationItems = [];
-
-    // Replace the existing addRecommendation function
-    function addRecommendation(title, reason) {
-        recommendationItems.push({ title, reason });
-        
-        // Update the compatibility UI to show the new recommendation
-        updateCompatibilityUI();
-    }
-
-    // Add a function to clear recommendations
-    function clearRecommendations() {
-        recommendationItems = [];
-    }
-
-    // Modify updateSelectedComponents to clear recommendations before checking
-    function updateSelectedComponents() {
-        // Clear current list
-        selectedComponentsList.innerHTML = '';
-        
-        // Clear recommendations before generating new ones
-        clearRecommendations();
-        
-        // Variables for calculating total price
-        let totalPrice = 0;
-        let hasComponents = false;
-        
-        
-        // Update compatibility status
-        checkCompatibility();
-    }
+// Load all component data from the API
+function loadComponents() {
+    const componentTypes = ['case', 'motherboard', 'cpu', 'cooler', 'memory', 'storage', 'gpu', 'psu'];
     
-    // Update selected components display
-    function updateSelectedComponents() {
-        // Clear current list
-        selectedComponentsList.innerHTML = '';
-        
-        // Variables for calculating total price
-        let totalPrice = 0;
-        let hasComponents = false;
-        
-        // Add each selected component to the list
-        Object.entries(selectedComponents).forEach(([type, component]) => {
-            const item = document.createElement('div');
-            item.className = 'component-item';
-            
-            const typeSpan = document.createElement('span');
-            typeSpan.className = 'component-type';
-            typeSpan.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)}:`;
-            
-            const nameSpan = document.createElement('span');
-            nameSpan.className = 'component-name';
-            
-            const priceSpan = document.createElement('span');
-            priceSpan.className = 'component-price';
-            
-            if (component) {
-                nameSpan.textContent = `${component.brand} ${component.model}`;
-                priceSpan.textContent = `$${component.price.toFixed(2)}`;
-                totalPrice += component.price;
-                hasComponents = true;
-            } else {
-                nameSpan.textContent = 'Not selected';
-                priceSpan.textContent = '$0.00';
+    const fetchPromises = componentTypes.map(type => 
+        fetch(`/api/components/${type}`, {
+            // Add cache-busting headers to ensure fresh data
+            cache: 'no-store',
+            headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
             }
-            
-            item.appendChild(typeSpan);
-            item.appendChild(nameSpan);
-            item.appendChild(priceSpan);
-            
-            selectedComponentsList.appendChild(item);
-        });
-        
-        // Update total price
-        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
-        
-        // Update compatibility status
-        checkCompatibility();
-        
-        // Update recommendations
-        if (hasComponents) {
-            updateRecommendations();
-        }
-    }
+        })
+        .then(response => response.json())
+        .then(data => {
+            componentsData[type] = data;
+            populateSelectOptions(type, data);
+        })
+    );
     
-    // Fetch compatible motherboards
-    async function fetchCompatibleMotherboards(cpuId) {
-        try {
-            const response = await fetch(`/api/compatibility/${cpuId}`);
-            const compatibilityData = await response.json();
-            
-            // Get compatible motherboard IDs
-            const compatibleMbIds = compatibilityData
-                .filter(item => item.type === 'motherboard' && item.compatible)
-                .map(item => parseInt(item.component_id));
-            
-            if (compatibleMbIds.length > 0) {
-                // Get compatible motherboards
-                const compatibleMbs = components.motherboard.filter(mb => compatibleMbIds.includes(mb.id));
-                
-                if (compatibleMbs.length > 0) {
-                    // Recommend the first compatible motherboard
-                    const mb = compatibleMbs[0];
-                    addRecommendation(
-                        `${mb.brand} ${mb.model}`, 
-                        `Compatible motherboard for your selected CPU, socket ${mb.specs.socket}`
-                    );
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching compatible motherboards:', error);
-        }
-    }
-    
-    // Recommend memory based on motherboard
-    function recommendMemoryForMotherboard(motherboard) {
-        // Get memory compatible with this motherboard
-        const compatibleMemory = components.memory.filter(mem => {
-            // Check if memory capacity is within motherboard limits
-            const memoryModules = mem.specs.modules;
-            const memoryCapacity = parseInt(memoryModules.split('x')[1]) * parseInt(memoryModules.split('x')[0]);
-            
-            return memoryCapacity <= motherboard.specs.memory_max;
-        });
-        
-        if (compatibleMemory.length > 0) {
-            // Recommend a good value memory option
-            const mem = compatibleMemory[Math.floor(compatibleMemory.length / 3)]; // Get one from the lower-mid range
-            addRecommendation(
-                `${mem.brand} ${mem.model}`, 
-                `Good value memory option compatible with your motherboard`
-            );
-        }
-    }
-    
-    // Helper function to add a recommendation card
-    function addRecommendation(title, reason) {
-        const card = document.createElement('div');
-        card.className = 'recommendation-card';
-        
-        const titleElement = document.createElement('div');
-        titleElement.className = 'recommendation-title';
-        titleElement.textContent = title;
-        
-        const reasonElement = document.createElement('div');
-        reasonElement.className = 'recommendation-reason';
-        reasonElement.textContent = reason;
-        
-        card.appendChild(titleElement);
-        card.appendChild(reasonElement);
-        
-        recommendationsContainer.appendChild(card);
-    }
-        
-    // Save build to database
-    async function saveBuild() {
-        const buildName = buildNameInput.value.trim() || 'Untitled Build';
-        
-        // Get component IDs
-        const componentIds = Object.values(selectedComponents)
-            .filter(component => component !== null)
-            .map(component => component.id);
-        
-        if (componentIds.length === 0) {
-            alert('Please select at least one component before saving');
-            return;
-        }
-        
-        try {
-            const response = await fetch('/api/builds', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: buildName,
-                    components: componentIds
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.share_code) {
-                // Display the share code in the UI
-                const shareCodeDisplay = document.getElementById('share-code-display');
-                const shareCodeText = document.getElementById('share-code-text');
-                
-                if (shareCodeDisplay && shareCodeText) {
-                    shareCodeText.textContent = data.share_code;
-                    shareCodeDisplay.style.display = 'block';
-                }
-                
-                return data;
-            } else {
-                alert('Error saving build');
-                return null;
-            }
-        } catch (error) {
-            console.error('Error saving build:', error);
-            alert('Error saving build');
-            return null;
-        }
-    }
-    
-    // Clear all selected components
-    function clearBuild() {
-        // Reset dropdowns
-        caseSelect.value = '';
-        motherboardSelect.value = '';
-        cpuSelect.value = '';
-        coolerSelect.value = '';
-        memorySelect.value = '';
-        storageSelect.value = '';
-        gpuSelect.value = '';
-        psuSelect.value = '';
-        
-        // Reset selected components
-        selectedComponents = {
-            case: null,
-            motherboard: null,
-            cpu: null,
-            cooler: null,
-            memory: null,
-            storage: null,
-            gpu: null,
-            psu: null
-        };
-        
-        // Reset build name
-        buildNameInput.value = '';
-        
-        // Hide share code display
-        const shareCodeDisplay = document.getElementById('share-code-display');
-        if (shareCodeDisplay) {
-            shareCodeDisplay.style.display = 'none';
-        }
-        
-        // Update UI
-        updateSelectedComponents();
-        
-        // Reset compatibility status
-        document.querySelector('.compatibility-status').className = 'compatibility-status';
-        compatibilityMessage.textContent = 'Select components to check compatibility';
-        
-        // Reset recommendations
-        recommendationsContainer.innerHTML = '';
-noRecommendations.style.display = 'block';
+    Promise.all(fetchPromises)
+        .then(() => console.log("All components loaded"))
+        .catch(error => console.error('Error loading components:', error));
 }
 
-// Load a build by share code
-async function loadBuild() {
-    // Show modal for entering share code
+// Populate select dropdown with component options
+function populateSelectOptions(type, components) {
+    const select = document.getElementById(`${type}-select`);
+    if (!select) return;
+    
+    // Clear existing options except the first one
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
+    // Add options for each component
+    components.forEach(component => {
+        const option = document.createElement('option');
+        option.value = component.id;
+        
+        // Format the display text based on component type
+        let displayText = '';
+        
+        if (type === 'cpu') {
+            const socket = component.specs?.socket || 'Unknown Socket';
+            displayText = `${component.brand} ${component.model} (${socket}) - $${component.price.toFixed(2)}`;
+        } else if (type === 'motherboard') {
+            const socket = component.specs?.socket || 'Unknown Socket';
+            displayText = `${component.brand} ${component.model} (${socket}) - $${component.price.toFixed(2)}`;
+        } else if (type === 'gpu') {
+            // Include chipset information for GPUs
+            const chipset = component.specs?.chip || 'Unknown';
+            displayText = `${component.brand} ${component.model} (${chipset}) - $${component.price.toFixed(2)}`;
+        } else if (type === 'storage') {
+            // Include capacity information for storage
+            const capacity = component.specs?.capacity || 'Unknown';
+            displayText = `${component.brand} ${component.model} (${capacity}) - $${component.price.toFixed(2)}`;
+        } else if (type === 'psu') {
+            // Include wattage information for power supplies
+            const wattage = component.specs?.wattage || 'Unknown';
+            displayText = `${component.brand} ${component.model} (${wattage}) - $${component.price.toFixed(2)}`;
+        } else {
+            displayText = `${component.brand} ${component.model} - $${component.price.toFixed(2)}`;
+        }
+        
+        option.textContent = displayText;
+        select.appendChild(option);
+    });
+}
+
+// Set up event listeners for select elements and buttons
+function setupEventListeners() {
+    // Component select elements
+    const componentTypes = ['case', 'motherboard', 'cpu', 'cooler', 'memory', 'storage', 'gpu', 'psu'];
+    
+    componentTypes.forEach(type => {
+        const select = document.getElementById(`${type}-select`);
+        if (select) {
+            select.addEventListener('change', () => handleComponentSelection(type, select));
+        }
+    });
+    
+    // Button event listeners
+    const saveButton = document.getElementById('save-build');
+    if (saveButton) {
+        saveButton.addEventListener('click', saveBuild);
+    }
+    
+    const clearButton = document.getElementById('clear-build');
+    if (clearButton) {
+        clearButton.addEventListener('click', clearBuild);
+    }
+    
+    const loadButton = document.getElementById('load-build');
+    if (loadButton) {
+        loadButton.addEventListener('click', showLoadBuildModal);
+    }
+    
+    // Modal close button
+    const closeModalButton = document.querySelector('.close');
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', hideLoadBuildModal);
+    }
+    
+    // Load code button
+    const loadCodeButton = document.getElementById('load-code-button');
+    if (loadCodeButton) {
+        loadCodeButton.addEventListener('click', loadBuildByCode);
+    }
+}
+
+// Handle component selection
+function handleComponentSelection(type, select) {
+    if (select.selectedIndex <= 0) {
+        // Remove component if "Select a..." is chosen
+        if (selectedComponents[type]) {
+            delete selectedComponents[type];
+        }
+    } else {
+        // Find the selected component data
+        const componentId = parseInt(select.value);
+        const componentData = componentsData[type].find(c => c.id === componentId);
+        
+        if (componentData) {
+            selectedComponents[type] = componentData;
+            
+            // Check compatibility if both CPU and motherboard are selected
+            if ((type === 'cpu' || type === 'motherboard') && 
+                selectedComponents['cpu'] && selectedComponents['motherboard']) {
+                checkCompatibility();
+            }
+        }
+    }
+    
+    // Update the build summary
+    updateBuildSummary();
+}
+
+// Check compatibility between CPU and motherboard
+function checkCompatibility() {
+    const cpu = selectedComponents['cpu'];
+    const motherboard = selectedComponents['motherboard'];
+    
+    // Only check if both components are selected
+    if (!cpu || !motherboard) {
+        // Reset compatibility message if one component is unselected
+        const compatibilityMessage = document.getElementById('compatibility-message');
+        const compatibilityStatus = document.querySelector('.compatibility-status');
+        
+        compatibilityStatus.className = 'compatibility-status';
+        compatibilityMessage.textContent = "Select both CPU and motherboard to check compatibility";
+        return;
+    }
+    
+    console.log("Checking compatibility between CPU and motherboard");
+    
+    // Get CPU and motherboard socket information
+    const cpuSocket = cpu.specs?.socket;
+    const mbSocket = motherboard.specs?.socket;
+    const cpuBrand = cpu.brand;
+    const cpuModel = cpu.model;
+    
+    // Check compatibility based on specific rules
+    let isCompatible = false;
+    let message = "";
+    
+    // Rule 1: AMD CPUs should only be compatible with AM5 motherboards
+    if (cpuBrand.includes('AMD')) {
+        if (mbSocket === 'AM5') {
+            isCompatible = true;
+            message = `${cpuBrand} ${cpuModel} is compatible with ${mbSocket} motherboard!`;
+        } else {
+            isCompatible = false;
+            message = `${cpuBrand} ${cpuModel} requires an AM5 socket motherboard, but selected motherboard has ${mbSocket} socket.`;
+        }
+    }
+    // Rule 2: Intel Core i5/i7/i9 should only be compatible with LGA 1700 motherboards
+    else if (cpuModel.includes('Core i5') || cpuModel.includes('Core i7') || cpuModel.includes('Core i9')) {
+        if (mbSocket === 'LGA 1700') {
+            isCompatible = true;
+            message = `${cpuBrand} ${cpuModel} is compatible with ${mbSocket} motherboard!`;
+        } else {
+            isCompatible = false;
+            message = `${cpuBrand} ${cpuModel} requires an LGA 1700 socket motherboard, but selected motherboard has ${mbSocket} socket.`;
+        }
+    }
+    // Rule 3: Intel Core Ultra should only be compatible with LGA 1851 motherboards
+    else if (cpuModel.includes('Core Ultra')) {
+        if (mbSocket === 'LGA 1851') {
+            isCompatible = true;
+            message = `${cpuBrand} ${cpuModel} is compatible with ${mbSocket} motherboard!`;
+        } else {
+            isCompatible = false;
+            message = `${cpuBrand} ${cpuModel} requires an LGA 1851 socket motherboard, but selected motherboard has ${mbSocket} socket.`;
+        }
+    }
+    // Fallback for any other cases - check with the API
+    else {
+        // Call the compatibility check API
+        fetch('/api/check-compatibility', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cpu: cpu,
+                motherboard: motherboard
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Compatibility check result:", data);
+            
+            const compatibilityMessage = document.getElementById('compatibility-message');
+            const compatibilityStatus = document.querySelector('.compatibility-status');
+            
+            if (data.compatible) {
+                compatibilityStatus.className = 'compatibility-status compatible';
+                compatibilityMessage.textContent = "CPU and motherboard are compatible!";
+            } else {
+                compatibilityStatus.className = 'compatibility-status incompatible';
+                compatibilityMessage.textContent = data.message || "CPU and motherboard are not compatible.";
+            }
+        })
+        .catch(error => {
+            console.error('Error checking compatibility:', error);
+            
+            const compatibilityMessage = document.getElementById('compatibility-message');
+            compatibilityMessage.textContent = "Error checking compatibility. Please try again.";
+        });
+        return; // Return early since we're handling this asynchronously
+    }
+    
+    // Update the UI with compatibility result
+    console.log("Compatibility check result:", isCompatible, message);
+    
+    const compatibilityMessage = document.getElementById('compatibility-message');
+    const compatibilityStatus = document.querySelector('.compatibility-status');
+    
+    if (isCompatible) {
+        compatibilityStatus.className = 'compatibility-status compatible';
+        compatibilityMessage.textContent = message;
+    } else {
+        compatibilityStatus.className = 'compatibility-status incompatible';
+        compatibilityMessage.textContent = message;
+    }
+}
+
+// Update the build summary display
+function updateBuildSummary() {
+    const componentsListElement = document.getElementById('selected-components-list');
+    if (!componentsListElement) return;
+    
+    // Clear the current list
+    componentsListElement.innerHTML = '';
+    
+    // Calculate total price
+    let totalPrice = 0;
+    
+    // Create a component item for each selected component
+    const componentTypes = ['case', 'motherboard', 'cpu', 'cooler', 'memory', 'storage', 'gpu', 'psu'];
+    
+    componentTypes.forEach(type => {
+        const component = selectedComponents[type];
+        if (component) {
+            // Add to total price
+            totalPrice += component.price;
+            
+            // Create component item element
+            const componentItem = document.createElement('div');
+            componentItem.className = 'component-item';
+            
+            // Component name div
+            const componentName = document.createElement('div');
+            componentName.className = 'component-name';
+            
+            // Add specific info based on component type
+            let displayName = `${type.charAt(0).toUpperCase() + type.slice(1)}: ${component.brand} ${component.model}`;
+            
+            // Add additional info for specific component types
+            if (type === 'gpu' && component.specs?.chip) {
+                displayName += ` (${component.specs.chip})`;
+            } else if (type === 'storage' && component.specs?.capacity) {
+                displayName += ` (${component.specs.capacity})`;
+            } else if (type === 'psu' && component.specs?.wattage) {
+                displayName += ` (${component.specs.wattage})`;
+            }
+            
+            componentName.textContent = displayName;
+            
+            // Component price div
+            const componentPrice = document.createElement('div');
+            componentPrice.className = 'component-price';
+            componentPrice.textContent = `$${component.price.toFixed(2)}`;
+            
+            // Add to component item
+            componentItem.appendChild(componentName);
+            componentItem.appendChild(componentPrice);
+            
+            // Add to components list
+            componentsListElement.appendChild(componentItem);
+        }
+    });
+    
+    // Update total price display
+    const totalPriceElement = document.getElementById('total-price');
+    if (totalPriceElement) {
+        totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
+    }
+}
+
+// Save the current build
+function saveBuild() {
+    const buildName = document.getElementById('build-name').value || "Untitled Build";
+    
+    // Make sure we have at least some components selected
+    if (Object.keys(selectedComponents).length === 0) {
+        alert("Please select at least one component before saving.");
+        return;
+    }
+    
+    // Prepare the build data
+    const buildData = {
+        name: buildName,
+        components: selectedComponents
+    };
+    
+    // Send save request to the API
+    fetch('/api/builds', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(buildData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show the share code
+            const shareCodeDisplay = document.getElementById('share-code-display');
+            const shareCodeText = document.getElementById('share-code-text');
+            
+            if (shareCodeDisplay && shareCodeText) {
+                shareCodeText.textContent = data.share_code;
+                shareCodeDisplay.style.display = 'block';
+            }
+            
+            alert(`Build saved successfully! Your share code is: ${data.share_code}`);
+        } else {
+            alert('Error saving build: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error saving build:', error);
+        alert('Error saving build. Please try again.');
+    });
+}
+
+// Show the load build modal
+function showLoadBuildModal() {
     const modal = document.getElementById('load-build-modal');
     if (modal) {
         modal.style.display = 'block';
     }
 }
 
-// Load build using share code from input
-async function loadBuildByCode() {
-    const codeInput = document.getElementById('share-code-input');
-    const shareCode = codeInput.value.trim();
-    
-    if (!shareCode) {
-        alert('Please enter a share code');
+// Hide the load build modal
+function hideLoadBuildModal() {
+    const modal = document.getElementById('load-build-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Load a build by share code
+function loadBuildByCode() {
+    const shareCodeInput = document.getElementById('share-code-input');
+    if (!shareCodeInput || !shareCodeInput.value) {
+        alert("Please enter a share code.");
         return;
     }
     
-    try {
-        const response = await fetch(`/api/builds/${shareCode}`);
-        const data = await response.json();
-        
-        if (data) {
-            // Clear current build
-            clearBuild();
+    const shareCode = shareCodeInput.value.trim();
+    
+    // Request the build data from the API
+    fetch(`/api/builds/${shareCode}`)
+        .then(response => response.json())
+        .then(data => {
+            // Hide the modal
+            hideLoadBuildModal();
             
-            // Set build name
-            buildNameInput.value = data.name || '';
+            // Set the build name
+            const buildNameInput = document.getElementById('build-name');
+            if (buildNameInput) {
+                buildNameInput.value = data.name || "Loaded Build";
+            }
             
-            // Load components
-            if (data.components && data.components.length > 0) {
-                data.components.forEach(component => {
-                    const type = component.type;
-                    
-                    // Update selected components
-                    selectedComponents[type] = component;
-                    
-                    // Update dropdown selection
+            // Clear current selections
+            clearBuild(false); // Don't show alert
+            
+            // Select each component
+            if (data.components) {
+                for (const [type, component] of Object.entries(data.components)) {
                     const select = document.getElementById(`${type}-select`);
                     if (select) {
-                        select.value = component.id;
+                        // Find the option with matching component ID
+                        for (let i = 0; i < select.options.length; i++) {
+                            if (select.options[i].value == component.id) {
+                                select.selectedIndex = i;
+                                handleComponentSelection(type, select);
+                                break;
+                            }
+                        }
                     }
-                });
-                
-                // Update UI
-                updateSelectedComponents();
+                }
             }
             
-            // Close modal
-            const modal = document.getElementById('load-build-modal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
-        } else {
-            alert('Build not found');
-        }
-    } catch (error) {
-        console.error('Error loading build:', error);
-        alert('Error loading build');
-    }
+            alert("Build loaded successfully!");
+        })
+        .catch(error => {
+            console.error('Error loading build:', error);
+            alert("Error loading build. Please check the share code and try again.");
+        });
 }
 
-// Share build function
-function shareBuild() {
-    saveBuild().then(data => {
-        if (data && data.share_code) {
-            // Create a shareable URL
-            const shareableUrl = `${window.location.origin}${window.location.pathname}?code=${data.share_code}`;
-            
-            // Copy URL to clipboard
-            navigator.clipboard.writeText(shareableUrl).then(() => {
-                alert(`Build URL copied to clipboard: ${shareableUrl}`);
-            }).catch(err => {
-                alert(`Shareable URL: ${shareableUrl}`);
-            });
-        }
-    });
-}
-
-// Event listeners for component selection
-caseSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.case = components.case.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.case = null;
-    }
-    updateSelectedComponents();
-});
-
-motherboardSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.motherboard = components.motherboard.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.motherboard = null;
-    }
-    updateSelectedComponents();
-});
-
-cpuSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.cpu = components.cpu.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.cpu = null;
-    }
-    updateSelectedComponents();
-});
-
-coolerSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.cooler = components.cooler.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.cooler = null;
-    }
-    updateSelectedComponents();
-});
-
-memorySelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.memory = components.memory.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.memory = null;
-    }
-    updateSelectedComponents();
-});
-
-storageSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.storage = components.storage.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.storage = null;
-    }
-    updateSelectedComponents();
-});
-
-gpuSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.gpu = components.gpu.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.gpu = null;
-    }
-    updateSelectedComponents();
-});
-
-psuSelect.addEventListener('change', function() {
-    const selectedId = this.value;
-    if (selectedId) {
-        selectedComponents.psu = components.psu.find(item => item.id === parseInt(selectedId));
-    } else {
-        selectedComponents.psu = null;
-    }
-    updateSelectedComponents();
-});
-
-// Event listeners for buttons
-saveBuildButton.addEventListener('click', saveBuild);
-clearBuildButton.addEventListener('click', clearBuild);
-loadBuildButton.addEventListener('click', loadBuild);
-
-// Modal close button
-const closeModalBtn = document.querySelector('.close');
-if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', function() {
-        const modal = document.getElementById('load-build-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-    });
-}
-
-// Load button in modal
-const loadCodeButton = document.getElementById('load-code-button');
-if (loadCodeButton) {
-    loadCodeButton.addEventListener('click', loadBuildByCode);
-}
-
-// Close modal if clicked outside
-window.addEventListener('click', function(event) {
-    const modal = document.getElementById('load-build-modal');
-    if (modal && event.target === modal) {
-        modal.style.display = 'none';
-    }
-});
-
-// Check if we're loading a shared build
-function checkForSharedBuild() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const shareCode = urlParams.get('code');
+// Clear the current build
+function clearBuild(showAlert = true) {
+    // Reset all select elements
+    const componentTypes = ['case', 'motherboard', 'cpu', 'cooler', 'memory', 'storage', 'gpu', 'psu'];
     
-    if (shareCode) {
-        // Load the build with the share code
-        const codeInput = document.getElementById('share-code-input');
-        if (codeInput) {
-            codeInput.value = shareCode;
-            loadBuildByCode();
+    componentTypes.forEach(type => {
+        const select = document.getElementById(`${type}-select`);
+        if (select) {
+            select.selectedIndex = 0;
         }
+    });
+    
+    // Clear selected components
+    selectedComponents = {};
+    
+    // Update build summary
+    updateBuildSummary();
+    
+    // Reset compatibility message
+    const compatibilityMessage = document.getElementById('compatibility-message');
+    const compatibilityStatus = document.querySelector('.compatibility-status');
+    
+    if (compatibilityMessage && compatibilityStatus) {
+        compatibilityStatus.className = 'compatibility-status';
+        compatibilityMessage.textContent = "Select components to check compatibility";
+    }
+    
+    // Clear build name
+    const buildNameInput = document.getElementById('build-name');
+    if (buildNameInput) {
+        buildNameInput.value = '';
+    }
+    
+    // Hide share code
+    const shareCodeDisplay = document.getElementById('share-code-display');
+    if (shareCodeDisplay) {
+        shareCodeDisplay.style.display = 'none';
+    }
+    
+    if (showAlert) {
+        alert("Build cleared!");
     }
 }
-
-// Initialize
-fetchComponents().then(() => {
-    // Check for shared build after components are loaded
-    checkForSharedBuild();
-});
-});
-

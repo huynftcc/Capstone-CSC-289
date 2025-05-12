@@ -10,6 +10,9 @@ app = Flask(__name__)
 # Dictionary to store component data
 components_data = {}
 
+# Dictionary to store saved builds (in-memory storage)
+saved_builds = {}
+
 # Socket compatibility mapping
 socket_compatibility = {
     'AM5': ['AMD Ryzen'],  # All Ryzen CPUs with AM5 in the name are compatible with AM5 socket
@@ -129,12 +132,64 @@ def load_component_data():
                             except:
                                 price = 0
                         
+                        # Extract GPU name and identify chip/chipset
+                        gpu_name = row.get('Name', '')
+                        chip = row.get('Chip', '')
+                        
+                        # If chip is empty, try to extract from name
+                        if not chip:
+                            # Common GPU chipsets to look for
+                            chipsets = ["RTX 5090", "RTX 5080", "RTX 5070 Ti", "RTX 5070", "RTX 5060 Ti", "RTX 5060",
+                                      "RX 9700 XT", "RX 9700", "RX 9600 XT", "RX 9600", "Arc B580"]
+                            
+                            # Check GPU name for chipset references
+                            detected_chip = ""
+                            for chipset in chipsets:
+                                if chipset.lower() in gpu_name.lower():
+                                    detected_chip = chipset
+                                    break
+                            
+                            # Fallback detection based on model names
+                            if not detected_chip:
+                                if "VENTUS" in gpu_name and "PLUS" in gpu_name:
+                                    detected_chip = "RTX 5070"
+                                elif "VENTUS" in gpu_name:
+                                    detected_chip = "RTX 5060"
+                                elif "GAMING" in gpu_name and "AMP" in gpu_name:
+                                    detected_chip = "RX 9700 XT"
+                                elif "GAMING" in gpu_name:
+                                    detected_chip = "RX 9600"
+                                elif "EAGLE" in gpu_name:
+                                    detected_chip = "RTX 5060 Ti"
+                                elif "DUAL" in gpu_name:
+                                    detected_chip = "RTX 5060"
+                                elif "Ghost" in gpu_name:
+                                    detected_chip = "RX 9600"
+                                elif "Twin Edge" in gpu_name:
+                                    detected_chip = "RTX 5070"
+                                elif "AERO" in gpu_name:
+                                    detected_chip = "RTX 5060 Ti"
+                            
+                            chip = detected_chip
+                        
+                        # If still empty, provide a generic placeholder
+                        if not chip:
+                            # Price-based chipset guessing
+                            if price > 1500:
+                                chip = "RTX 5080/5090"
+                            elif price > 700:
+                                chip = "RTX 5070/RX 9700"
+                            elif price > 400:
+                                chip = "RTX 5060/RX 9600"
+                            else:
+                                chip = "GPU"
+                        
                         component.update({
                             'brand': row.get('Name', '').split()[0] if row.get('Name') else '',
                             'model': ' '.join(row.get('Name', '').split()[1:]) if row.get('Name') else '',
                             'price': price,
                             'specs': {
-                                'chip': row.get('Chip', ''),
+                                'chip': chip,
                                 'memory': row.get('Memory', ''),
                                 'base_clock': row.get('Base Clock', ''),
                                 'boost_clock': row.get('Boost Clock', ''),
@@ -242,9 +297,22 @@ def check_compatibility(cpu_id):
 def save_build():
     data = request.json
     
-    # In a real implementation, you would save to a database
-    # For now, generate a simple share code
+    if not data:
+        return jsonify({
+            'success': False,
+            'message': 'No data provided'
+        })
+    
+    # Generate a share code
     share_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    
+    # Store the build data in our in-memory dictionary
+    saved_builds[share_code] = {
+        'name': data.get('name', 'Untitled Build'),
+        'components': data.get('components', {})
+    }
+    
+    print(f"Saved build with code {share_code}: {saved_builds[share_code]}")
     
     return jsonify({
         'success': True,
@@ -254,11 +322,14 @@ def save_build():
 # API endpoint to load builds by share code
 @app.route('/api/builds/<share_code>')
 def load_build(share_code):
-    # In a real implementation, you would load from a database
-    # For now, return a placeholder build
+    # Check if the share code exists in our saved builds
+    if share_code in saved_builds:
+        return jsonify(saved_builds[share_code])
+    
+    # If not found, return an empty build
     return jsonify({
-        'name': f'Shared Build {share_code}',
-        'components': []
+        'name': f'Build Not Found',
+        'components': {}
     })
 
 # API endpoint for direct compatibility check
@@ -303,178 +374,6 @@ def direct_compatibility_check():
             'cpu_brand': cpu_brand
         }
     })
-
-@app.route('/api/calculate-power', methods=['POST'])
-def api_calculate_power():
-    """API endpoint for calculating power requirements."""
-    data = request.json
-    if not data:
-        return jsonify({'error': 'No component data provided'})
-    
-    power_info = calculate_power_requirements(data)
-    return jsonify(power_info)
-
-# Power calculation function
-def calculate_power_requirements(components):
-    """
-    Calculate estimated power requirements for the system.
-    
-    Args:
-        components: Dictionary of selected components
-        
-    Returns:
-        Dictionary with power calculation results
-    """
-    total_power = 0
-    power_breakdown = {}
-    
-    # Base system power (motherboard, fans, etc.)
-    base_power = COMPONENT_POWER_ESTIMATES['motherboard']
-    total_power += base_power
-    power_breakdown['Base System'] = base_power
-    
-    # CPU power
-    cpu = components.get('cpu')
-    if cpu:
-        cpu_name = f"{cpu.get('brand', '')} {cpu.get('model', '')}"
-        cpu_tdp = 0
-        
-        # Check if CPU has TDP information
-        if cpu.get('specs') and 'tdp' in cpu['specs']:
-            cpu_tdp = int(cpu['specs']['tdp'])
-        else:
-            # Estimate TDP based on CPU name
-            for cpu_type, tdp in CPU_TDP_ESTIMATES.items():
-                if cpu_type in cpu_name:
-                    cpu_tdp = tdp
-                    break
-            
-            # Default if no match
-            if cpu_tdp == 0:
-                cpu_tdp = 95  # Reasonable default
-        
-        # Add 20% overhead for CPU power spikes
-        cpu_power = int(cpu_tdp * 1.2)
-        total_power += cpu_power
-        power_breakdown['CPU'] = cpu_power
-    
-    # GPU power
-    gpu = components.get('gpu')
-    if gpu:
-        gpu_name = f"{gpu.get('brand', '')} {gpu.get('model', '')}".lower()
-        gpu_tdp = 0
-        
-        # Try to match with known GPUs
-        for model, specs in GPU_SPECS.items():
-            if model.lower() in gpu_name:
-                gpu_tdp = specs['tdp_watts']
-                break
-        
-        # If no match, estimate based on GPU class and naming patterns
-        if gpu_tdp == 0:
-            # NVIDIA RTX 5000 series
-            if 'rtx' in gpu_name and ('5' in gpu_name or '50' in gpu_name):
-                if '5090' in gpu_name:
-                    gpu_tdp = 575
-                elif '5080' in gpu_name:
-                    gpu_tdp = 360
-                elif '5070 ti' in gpu_name or '5070ti' in gpu_name:
-                    gpu_tdp = 300
-                elif '5070' in gpu_name:
-                    gpu_tdp = 250
-                elif '5060 ti' in gpu_name or '5060ti' in gpu_name:
-                    gpu_tdp = 200
-                elif '5060' in gpu_name:
-                    gpu_tdp = 170
-                else:
-                    gpu_tdp = 250  # Default RTX 5000 series estimate
-            
-            # AMD RX 9000 series
-            elif 'rx' in gpu_name and ('9' in gpu_name or '90' in gpu_name):
-                if '9700 xt' in gpu_name:
-                    gpu_tdp = 320
-                elif '9700' in gpu_name:
-                    gpu_tdp = 290
-                elif '9600 xt' in gpu_name:
-                    gpu_tdp = 250
-                elif '9600' in gpu_name:
-                    gpu_tdp = 225
-                else:
-                    gpu_tdp = 275  # Default RX 9000 series estimate
-            
-            # Intel Arc B580
-            elif 'arc' in gpu_name and 'b580' in gpu_name:
-                gpu_tdp = 200
-                
-            else:
-                # Default value if no match is found
-                gpu_tdp = 250
-        
-        total_power += gpu_tdp
-        power_breakdown['GPU'] = gpu_tdp
-    
-    # Memory power (typical RAM uses 3-5W per module)
-    memory = components.get('memory')
-    if memory:
-        memory_modules = memory.get('specs', {}).get('modules', '')
-        module_count = 0
-        
-        # Try to extract module count from specs
-        if memory_modules and 'x' in memory_modules:
-            try:
-                module_count = int(memory_modules.split('x')[0].strip())
-            except:
-                module_count = 2  # Default to 2 modules
-        else:
-            module_count = 2  # Default to 2 modules
-        
-        memory_power = module_count * COMPONENT_POWER_ESTIMATES['memory_per_stick']
-        total_power += memory_power
-        power_breakdown['Memory'] = memory_power
-    
-    # Storage power (SSDs ~3-7W, HDDs ~8-15W)
-    storage = components.get('storage')
-    if storage:
-        storage_type = storage.get('specs', {}).get('form_factor', '').upper()
-        
-        if 'M.2' in storage_type or 'SSD' in storage_type:
-            storage_power = COMPONENT_POWER_ESTIMATES['ssd']
-        else:
-            storage_power = COMPONENT_POWER_ESTIMATES['hdd']
-        
-        total_power += storage_power
-        power_breakdown['Storage'] = storage_power
-    
-    # Add other components (fans, USB devices, etc.)
-    other_power = COMPONENT_POWER_ESTIMATES['fan_per_unit'] * 3  # Assume 3 fans
-    other_power += COMPONENT_POWER_ESTIMATES['rgb_lighting']     # RGB lighting
-    other_power += COMPONENT_POWER_ESTIMATES['usb_devices']      # USB devices
-    
-    total_power += other_power
-    power_breakdown['Other Components'] = other_power
-    
-    # Add overhead for power spikes and overclocking
-    overhead = int(total_power * COMPONENT_POWER_ESTIMATES['overclocking_overhead'])
-    total_power += overhead
-    power_breakdown['Overhead'] = overhead
-    
-    # Round up to nearest 50W (common PSU increments)
-    recommended_psu = total_power + (50 - total_power % 50) if total_power % 50 else total_power
-    
-    # Ensure minimum reasonable PSU wattage
-    if recommended_psu < 450:
-        recommended_psu = 450
-    
-    # Add buffer for high-end GPUs
-    if 'GPU' in power_breakdown and power_breakdown['GPU'] > 350:
-        if recommended_psu < 850:
-            recommended_psu = 850
-    
-    return {
-        'total_estimated_watts': total_power,
-        'recommended_psu_watts': recommended_psu,
-        'breakdown': power_breakdown
-    }
 
 if __name__ == '__main__':
     app.run(debug=True)

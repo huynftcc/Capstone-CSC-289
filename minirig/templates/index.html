@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}MiniRig - ITX PC Building Made Simple{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="hero">
@@ -69,9 +71,8 @@
         </div>
         
         <div class="info-card">
-            <h3>Benefits and Use Cases</h3>
-            <p>Perfect for college dorms, small apartments, or minimalist setups. Ideal for creating a powerful HTPC or living room gaming machine.</p>
-            <p>Many ITX builds can match or exceed the performance of full-sized PCs with proper component selection.</p>
+            <h3>ITX Taxes</h3>
+            <p>Smaller doesn't mean cheaper, it may be even more expensive due to several factos like specialized desgin, unique features, etc.</p>
         </div>
     </div>
 </section>
@@ -94,9 +95,9 @@
         </div>
         
         <div class="feature-card">
-            <h3>Recommed Build</h3>
+            <h3>Recommend Build</h3>
             <p>We recommend what best parts and builds in these days.</p>
-            <a href="{{ url_for('build') }}">Explore What Best</a>
+            <a href="{{ url_for('recommend') }}">Explore What Best</a>
         </div>
     </div>
 </section>
