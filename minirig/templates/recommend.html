@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}MiniRig – What we recommend{% endblock %}
+
+{% block content %}
+  <section class="page-title">
+    <h1>Build that we recommend</h1>
+    <p> </p>
+  </section>
+
+  <div class="container main-content">
+    <div class="cards-grid">
+      <!-- Low Budget Build -->
+      <div class="card">
+          <div class="card-body" style="margin-left: 15%; width: 80%;">
+            <img src="{{ url_for('static', filename='img/cases/Fractal_Terra.jpg') }}" alt="Fractal Design Terra" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
+            
+            <h3 class="card-title">Budget AMD Build</h3>
+            <ul>
+                <li>
+                    <strong>CPU:</strong> AMD Ryzen 5 9600X - $209.95
+                </li>
+                <li>
+                    <strong>Motherboard:</strong> ASRock A620I LIGHTNING WIFI - $139.99
+                </li>
+                <li>
+                    <strong>Memory:</strong> Team Group T-CREATE EXPERT 32GB - $92.99
+                </li>
+                <li>
+                    <strong>GPU:</strong> GUNNIR Intel Arc B580 Index 12GB - $341.00
+                </li>
+                <li>
+                    <strong>Case:</strong> Fractal Design Terra Graphite Mini-ITX - $179.99
+                </li>
+                <li>
+                    <strong>PSU:</strong> LIAN LI SP850 - $138.99
+                </li>
+                <li>
+                    <strong>Storage:</strong> Crucial P310 1TB NVMe SSD - $73.55
+                </li>
+                <li>
+                    <strong>CPU Cooler:</strong> AXP90-X47 Full Cooper - $42.95
+                </li>
+                <li>
+                    <strong>Total:</strong>  $1,219.41
+                </li>
+            </ul>
+          </div>
+        </div>
+
+        
+      <div class="card">
+          <div class="card-body" style="margin-left: 15%; width: 80%;">
+            <img src="{{ url_for('static', filename='img/cases/Fractal_Terra_Green.jpg') }}" alt="Fractal Design Terra Green" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
+            
+            <h3 class="card-title">Mid Range Build</h3>
+            <ul>
+                <li>
+                    <strong>CPU:</strong> AMD Ryzen 7 9700X- $309 or Intel Core i7 14900K
+                </li>
+                <li>
+                    <strong>Motherboard:</strong> ASUS ROG STRIX B650E-I Gaming WiFi - $229.99 or ASUS ROG Strix B760-I Gaming WiFi Intel (-$10)
+                </li>
+                <li>
+                    <strong>Memory:</strong> T-Create Expert CL32 Overclocking 10L DDR5 32GB - $96.99
+                </li>
+                <li>
+                    <strong>GPU:</strong> Gigabyte Radeon RX 9070XT 16GB - $729.99 or MSI RTX 5070 TI 16G VENTUS 3X OC (+$170)
+                </li>
+                <li>
+                    <strong>Case:</strong> Fractal Design Terra Green Mini-ITX - $179.99
+                </li>
+                <li>
+                    <strong>PSU:</strong> Cosair SF750 80 Plus Platinum (2024) - $179.99
+                </li>
+                <li>
+                    <strong>Storage:</strong> WD_BLACK 2TB SN850X NVMe - $151.99
+                </li>
+                <li>
+                    <strong>CPU Cooler:</strong> AXP90-X53 Full Cooper - $35.90
+                </li>
+                <li>
+                    <strong>Total:</strong> $1,913.85
+                </li>
+            </ul>
+          </div>
+        </div>
+  
+      <div class="card">
+        <div class="card-body" style="margin-left: 15%; width: 80%;">
+          <img src="{{ url_for('static', filename='img/cases/Formd T1.png') }}" alt="Formd T1" style="width: 80%; height: auto; margin-bottom: 1rem; margin-left: 15%; display: block;">
+          
+          <h3 class="card-title">High End Build</h3>
+          <ul>
+              <li>
+                  <strong>CPU:</strong> AMD Ryzen 7 9800X3D - $479.99 Or Intel Core i9 14900K (-$79.99)
+              </li>
+              <li>
+                  <strong>Motherboard:</strong> ASUS ROG Strix B850-I Gaming WiFi AMD - $299.99 or ASUS ROG Strix B760-I Gaming WiFi Intel (-$80)
+              </li>
+              <li>
+                  <strong>Memory:</strong> T-Create Expert CL32 Overclocking 10L DDR5 32GB - 96.99
+              </li>
+              <li>
+                  <strong>GPU:</strong> MSI RTX 5080 16G Ventus 3X OC Plus - $1409 or RTX 5080 Founder Edition (-$409) If you able to find one
+              </li>
+              <li>
+                  <strong>Case:</strong> Formd T1 - $215
+              </li>
+              <li>
+                  <strong>PSU:</strong> Corsair SF850 80 Plus Platinum (2024) - $199.99
+              </li>
+              <li>
+                  <strong>Storage:</strong> WD_BLACK 4TB SN850X NVMe - $284.63
+              </li>
+              <li>
+                  <strong>CPU Cooler:</strong> Cooler Master Atmos 240 - $129.99
+              </li>
+              <li>
+                  <strong>Total:</strong> $3,115.58
+              </li>
+          </ul>
+        </div>
+      </div>
+{% endblock %}
