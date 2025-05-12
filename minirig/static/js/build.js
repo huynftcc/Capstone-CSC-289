@@ -77,7 +77,75 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching components:', error);
         }
     }
+
+    // Check compatibility between components
+    async function checkCompatibility() {
+        isCompatible = true;
+        compatibilityIssues = [];
+        
+        // Reset compatibility UI
+        compatibilityMessage.textContent = 'Checking compatibility...';
+        document.querySelector('.compatibility-status').className = 'compatibility-status';
+        
+        // Check if components are selected
+        const hasSelection = Object.values(selectedComponents).some(component => component !== null);
+        
+        if (!hasSelection) {
+            compatibilityMessage.textContent = 'Select components to check compatibility';
+            return;
+        }
+
+            // GPU and PSU compatibility check
+    if (selectedComponents.gpu) {
+        const gpuName = `${selectedComponents.gpu.brand} ${selectedComponents.gpu.model}`.toLowerCase();
+        
+        // Simple PSU recommendations based on high-end GPUs
+        if (gpuName.includes('rtx 5090') || gpuName.includes('rtx5090')) {
+            if (!selectedComponents.psu) {
+                compatibilityIssues.push('RTX 5090 requires a 1000W or higher power supply');
+            } else {
+                // Check if PSU is 1000W or higher
+                const psuWattage = getPsuWattage(selectedComponents.psu);
+                if (psuWattage < 1000) {
+                    isCompatible = false;
+                    compatibilityIssues.push(`RTX 5090 requires a 1000W or higher power supply. Current PSU: ${psuWattage}W`);
+                }
+            }
+        } else if (gpuName.includes('rtx 5080') || gpuName.includes('rtx5080')) {
+            if (!selectedComponents.psu) {
+                compatibilityIssues.push('RTX 5080 requires an 850W or higher power supply');
+            } else {
+                // Check if PSU is 850W or higher
+                const psuWattage = getPsuWattage(selectedComponents.psu);
+                if (psuWattage < 850) {
+                    isCompatible = false;
+                    compatibilityIssues.push(`RTX 5080 requires an 850W or higher power supply. Current PSU: ${psuWattage}W`);
+                }
+            }
+        }
+        updateCompatibilityUI();
+    }
+
+    function getPsuWattage(psu) {
+        if (!psu) return 0;
+        
+        // Try to extract wattage from specs
+        if (psu.specs && psu.specs.wattage) {
+            const wattageStr = psu.specs.wattage;
+            return parseInt(wattageStr.replace('W', '').trim());
+        }
+        
+        // Try to find wattage in the model name
+        const psuName = `${psu.brand} ${psu.model}`.toLowerCase();
+        const wattageMatch = psuName.match(/\b(\d{3,4})\s*w\b/i);
+        
+        if (wattageMatch) {
+            return parseInt(wattageMatch[1]);
+        }
     
+    return 750;  // Default to 750W as we've filtered out lower wattages
+    }
+
     // Populate component dropdowns
     function populateDropdowns() {
         // Case dropdown
@@ -300,38 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // For now, let's just assume all GPUs fit in all cases
         }
         
-        // Check power supply wattage requirements (simplified for demo)
-        if (selectedComponents.psu && selectedComponents.cpu && selectedComponents.gpu) {
-            // Calculate estimated power requirements (simplistic approach)
-            let estimatedPower = 0;
-            
-            // Add CPU power (simplified)
-            if (selectedComponents.cpu.specs && selectedComponents.cpu.specs.tdp) {
-                estimatedPower += selectedComponents.cpu.specs.tdp;
-            } else {
-                estimatedPower += 95; // Default TDP estimation
-            }
-            
-            // Add GPU power (simplified)
-            estimatedPower += 150; // Default GPU power estimation
-            
-            // Add base system power (simplified)
-            estimatedPower += 100;
-            
-            // Get PSU wattage (simplified)
-            let psuWattage = 0;
-            if (selectedComponents.psu.specs && selectedComponents.psu.specs.wattage) {
-                const wattageStr = selectedComponents.psu.specs.wattage;
-                psuWattage = parseInt(wattageStr.replace('W', ''));
-            }
-            
-            // Check if PSU provides enough power
-            if (psuWattage > 0 && psuWattage < estimatedPower) {
-                isCompatible = false;
-                compatibilityIssues.push(`Power supply wattage (${psuWattage}W) may be insufficient for components (est. ${estimatedPower}W)`);
-            }
-        }
-        
         // Update UI based on compatibility
         updateCompatibilityUI();
     }
@@ -392,11 +428,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Modify the addRecommendation function to store recommendations in an array
+
     // Add this variable at the top with other global variables
     let recommendationItems = [];
 
-    // Replace the existing addRecommendation function
     function addRecommendation(title, reason) {
         recommendationItems.push({ title, reason });
         
@@ -421,7 +456,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let totalPrice = 0;
         let hasComponents = false;
         
-        // Rest of the existing function...
         
         // Update compatibility status
         checkCompatibility();
@@ -477,42 +511,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update recommendations
         if (hasComponents) {
             updateRecommendations();
-        }
-    }
-    
-    // Generate recommendations based on selected components
-    function updateRecommendations() {
-        // Clear current recommendations
-        recommendationsContainer.innerHTML = '';
-        
-        // Hide "no recommendations" message if we have components selected
-        if (Object.values(selectedComponents).some(component => component !== null)) {
-            noRecommendations.style.display = 'none';
-        } else {
-            noRecommendations.style.display = 'block';
-            return;
-        }
-        
-        // CPU + Motherboard Compatibility Recommendation
-        if (selectedComponents.cpu && !selectedComponents.motherboard) {
-            // Recommend compatible motherboards
-            fetchCompatibleMotherboards(selectedComponents.cpu.id);
-        }
-        
-        // Memory Recommendation based on Motherboard
-        if (selectedComponents.motherboard && !selectedComponents.memory) {
-            recommendMemoryForMotherboard(selectedComponents.motherboard);
-        }
-        
-        // SFX Power Supply recommendation for small cases
-        if (selectedComponents.case) {
-            // This is a simplistic check - in a real implementation, you would check case dimensions
-            addRecommendation('SFX Power Supply', 'Consider an SFX power supply for better compatibility with ITX cases');
-        }
-        
-        // M.2 NVMe storage recommendation
-        if (!selectedComponents.storage) {
-            addRecommendation('M.2 NVMe SSD', 'Save space and improve performance with M.2 storage');
         }
     }
     
@@ -584,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         recommendationsContainer.appendChild(card);
     }
-    
+        
     // Save build to database
     async function saveBuild() {
         const buildName = buildNameInput.value.trim() || 'Untitled Build';
