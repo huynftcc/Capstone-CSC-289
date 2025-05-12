@@ -124,7 +124,14 @@ document.addEventListener('DOMContentLoaded', function() {
         components.storage.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
+            
+            // Get capacity and form factor from specs
+            const capacity = item.specs && item.specs.capacity ? item.specs.capacity : '';
+            const formFactor = item.specs && item.specs.form_factor ? item.specs.form_factor : '';
+            
+            // Create a more informative display string
+            option.textContent = `${item.brand} ${item.model} - ${capacity} ${formFactor} - $${item.price.toFixed(2)}`;
+            
             storageSelect.appendChild(option);
         });
         
@@ -268,14 +275,89 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!isCompatible) {
             statusElement.className = 'compatibility-status incompatible';
-            compatibilityMessage.textContent = 'Incompatibility Detected: ' + compatibilityIssues.join(', ');
+            
+            // Display incompatibility messages
+            let message = '<strong>Incompatibility Detected:</strong> ' + 
+                        compatibilityIssues.join('<br>');
+            
+            // Add recommendations immediately after incompatibility issues
+            if (recommendationItems.length > 0) {
+                message += '<br><br><strong>Recommendations:</strong><ul>';
+                recommendationItems.forEach(item => {
+                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
+                });
+                message += '</ul>';
+            }
+            
+            compatibilityMessage.innerHTML = message;
         } else if (compatibilityIssues.length > 0) {
             statusElement.className = 'compatibility-status warning';
-            compatibilityMessage.textContent = 'Warning: ' + compatibilityIssues.join(', ');
+            
+            // Display warning messages
+            let message = '<strong>Warning:</strong> ' + 
+                        compatibilityIssues.join('<br>');
+            
+            // Add recommendations after warnings
+            if (recommendationItems.length > 0) {
+                message += '<br><br><strong>Recommendations:</strong><ul>';
+                recommendationItems.forEach(item => {
+                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
+                });
+                message += '</ul>';
+            }
+            
+            compatibilityMessage.innerHTML = message;
         } else {
             statusElement.className = 'compatibility-status compatible';
-            compatibilityMessage.textContent = 'All components are compatible!';
+            
+            let message = 'All components are compatible!';
+            
+            // Add recommendations even if everything is compatible
+            if (recommendationItems.length > 0) {
+                message += '<br><br><strong>Recommendations:</strong><ul>';
+                recommendationItems.forEach(item => {
+                    message += `<li><strong>${item.title}</strong>: ${item.reason}</li>`;
+                });
+                message += '</ul>';
+            }
+            
+            compatibilityMessage.innerHTML = message;
         }
+    }
+
+    // Modify the addRecommendation function to store recommendations in an array
+    // Add this variable at the top with other global variables
+    let recommendationItems = [];
+
+    // Replace the existing addRecommendation function
+    function addRecommendation(title, reason) {
+        recommendationItems.push({ title, reason });
+        
+        // Update the compatibility UI to show the new recommendation
+        updateCompatibilityUI();
+    }
+
+    // Add a function to clear recommendations
+    function clearRecommendations() {
+        recommendationItems = [];
+    }
+
+    // Modify updateSelectedComponents to clear recommendations before checking
+    function updateSelectedComponents() {
+        // Clear current list
+        selectedComponentsList.innerHTML = '';
+        
+        // Clear recommendations before generating new ones
+        clearRecommendations();
+        
+        // Variables for calculating total price
+        let totalPrice = 0;
+        let hasComponents = false;
+        
+        // Rest of the existing function...
+        
+        // Update compatibility status
+        checkCompatibility();
     }
     
     // Update selected components display

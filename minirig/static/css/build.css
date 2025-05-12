@@ -208,6 +208,58 @@ select, input {
     }
 }
 
+/* Power requirements section */
+.power-requirements {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.power-requirements h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #000;
+    padding-bottom: 0.5rem;
+}
+
+.power-requirements h4 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.1rem;
+}
+
+.total-power, .recommended-psu {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.power-breakdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+}
+
+.power-breakdown li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.power-breakdown li:last-child {
+    border-bottom: none;
+}
+
+.component-name {
+    font-weight: 500;
+}
+
+.component-watts {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
 /* Modal Styles */
 .modal {
     display: none;
