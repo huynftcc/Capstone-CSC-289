@@ -77,75 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching components:', error);
         }
     }
-
-    // Check compatibility between components
-    async function checkCompatibility() {
-        isCompatible = true;
-        compatibilityIssues = [];
-        
-        // Reset compatibility UI
-        compatibilityMessage.textContent = 'Checking compatibility...';
-        document.querySelector('.compatibility-status').className = 'compatibility-status';
-        
-        // Check if components are selected
-        const hasSelection = Object.values(selectedComponents).some(component => component !== null);
-        
-        if (!hasSelection) {
-            compatibilityMessage.textContent = 'Select components to check compatibility';
-            return;
-        }
-
-            // GPU and PSU compatibility check
-    if (selectedComponents.gpu) {
-        const gpuName = `${selectedComponents.gpu.brand} ${selectedComponents.gpu.model}`.toLowerCase();
-        
-        // Simple PSU recommendations based on high-end GPUs
-        if (gpuName.includes('rtx 5090') || gpuName.includes('rtx5090')) {
-            if (!selectedComponents.psu) {
-                compatibilityIssues.push('RTX 5090 requires a 1000W or higher power supply');
-            } else {
-                // Check if PSU is 1000W or higher
-                const psuWattage = getPsuWattage(selectedComponents.psu);
-                if (psuWattage < 1000) {
-                    isCompatible = false;
-                    compatibilityIssues.push(`RTX 5090 requires a 1000W or higher power supply. Current PSU: ${psuWattage}W`);
-                }
-            }
-        } else if (gpuName.includes('rtx 5080') || gpuName.includes('rtx5080')) {
-            if (!selectedComponents.psu) {
-                compatibilityIssues.push('RTX 5080 requires an 850W or higher power supply');
-            } else {
-                // Check if PSU is 850W or higher
-                const psuWattage = getPsuWattage(selectedComponents.psu);
-                if (psuWattage < 850) {
-                    isCompatible = false;
-                    compatibilityIssues.push(`RTX 5080 requires an 850W or higher power supply. Current PSU: ${psuWattage}W`);
-                }
-            }
-        }
-        updateCompatibilityUI();
-    }
-
-    function getPsuWattage(psu) {
-        if (!psu) return 0;
-        
-        // Try to extract wattage from specs
-        if (psu.specs && psu.specs.wattage) {
-            const wattageStr = psu.specs.wattage;
-            return parseInt(wattageStr.replace('W', '').trim());
-        }
-        
-        // Try to find wattage in the model name
-        const psuName = `${psu.brand} ${psu.model}`.toLowerCase();
-        const wattageMatch = psuName.match(/\b(\d{3,4})\s*w\b/i);
-        
-        if (wattageMatch) {
-            return parseInt(wattageMatch[1]);
-        }
     
-    return 750;  // Default to 750W as we've filtered out lower wattages
-    }
-
     // Populate component dropdowns
     function populateDropdowns() {
         // Case dropdown
@@ -432,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add this variable at the top with other global variables
     let recommendationItems = [];
 
+    // Replace the existing addRecommendation function
     function addRecommendation(title, reason) {
         recommendationItems.push({ title, reason });
         
