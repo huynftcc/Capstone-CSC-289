@@ -139,7 +139,54 @@ document.addEventListener('DOMContentLoaded', function() {
         components.gpu.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
+            
+            // Try to extract GPU model and VRAM from specs
+            let gpuModel = '';
+            let vramSize = '';
+            
+            // Extract from specs if available
+            if (item.specs) {
+                if (item.specs.chip) {
+                    gpuModel = item.specs.chip;
+                }
+                if (item.specs.memory) {
+                    vramSize = item.specs.memory;
+                }
+            }
+            
+            // If not in specs, try to extract from model name
+            if (!gpuModel || !vramSize) {
+                const fullName = `${item.brand} ${item.model}`;
+                
+                // Try to extract GPU model (RTX 50xx, RX 9xxx, etc.)
+                const modelMatch = fullName.match(/(RTX\s*\d{4}\s*[A-Za-z]*|RX\s*\d{4}\s*[A-Za-z]*)/i);
+                if (modelMatch) {
+                    gpuModel = modelMatch[0];
+                }
+                
+                // Try to extract VRAM (xG, xGB)
+                const vramMatch = fullName.match(/(\d+\s*[GT]B|\d+\s*G)/i);
+                if (vramMatch) {
+                    vramSize = vramMatch[0];
+                }
+            }
+            
+            // Format the display text with additional information
+            let displayText = `${item.brand} ${item.model}`;
+            
+            // Add GPU model and VRAM if available
+            if (gpuModel && vramSize) {
+                displayText = `${item.brand} ${gpuModel} ${vramSize} - ${item.model}`;
+            } else if (gpuModel) {
+                displayText = `${item.brand} ${gpuModel} - ${item.model}`;
+            } else if (vramSize) {
+                displayText = `${item.brand} ${item.model} ${vramSize}`;
+            }
+            
+            // Add price
+            displayText += ` - $${item.price.toFixed(2)}`;
+            
+            option.textContent = displayText;
             gpuSelect.appendChild(option);
         });
         
@@ -147,62 +194,82 @@ document.addEventListener('DOMContentLoaded', function() {
         components.psu.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
-            option.textContent = `${item.brand} ${item.model} - $${item.price.toFixed(2)}`;
+            
+            // Extract or find wattage information
+            let wattage = '';
+            let efficiency = '';
+            
+            // Try to get from specs
+            if (item.specs) {
+                if (item.specs.wattage) {
+                    wattage = item.specs.wattage;
+                }
+                if (item.specs.efficiency) {
+                    efficiency = item.specs.efficiency;
+                }
+            }
+            
+            // If not in specs, try to extract from model name
+            const fullName = `${item.brand} ${item.model}`;
+            
+            // Extract wattage if not already found
+            if (!wattage) {
+                const wattageMatch = fullName.match(/(\d{3,4})(?:\s*W|\s*watts|\s*watt)/i);
+                if (wattageMatch) {
+                    wattage = wattageMatch[1] + 'W';
+                }
+            }
+            
+            // Extract efficiency rating if not already found
+            if (!efficiency) {
+                // Look for common 80+ ratings
+                const efficiencyMatch = fullName.match(/(titanium|platinum|gold|silver|bronze|white)/i);
+                if (efficiencyMatch) {
+                    efficiency = efficiencyMatch[1].toUpperCase();
+                }
+            }
+            
+            // Format the display text with the additional information
+            let displayText = `${item.brand} ${item.model}`;
+            
+            // Add wattage and efficiency if available - with only one '80+'
+            let specs = '';
+            if (wattage && efficiency) {
+                specs = `${wattage} ${efficiency}`;
+            } else if (wattage) {
+                specs = `${wattage}`;
+            } else if (efficiency) {
+                specs = `80+ ${efficiency}`;
+            }
+            
+            // Add the specs to the display text - ensure we're not duplicating info already in the model name
+            if (specs) {
+                // Check if the model name already contains this information
+                const modelHasWattage = item.model.includes(wattage);
+                const modelHasEfficiency = item.model.toLowerCase().includes(efficiency.toLowerCase());
+                const modelHas80Plus = item.model.toLowerCase().includes('80+') || item.model.toLowerCase().includes('80 plus');
+                
+                // Only add the full specs if neither are in the model name
+                if (!modelHasWattage && !modelHasEfficiency) {
+                    displayText = `${item.brand} ${item.model} (${specs})`;
+                } 
+                // Add only wattage if efficiency is already in the model
+                else if (!modelHasWattage && modelHasEfficiency) {
+                    displayText = `${item.brand} ${item.model} (${wattage})`;
+                }
+                // Add only efficiency if wattage is already in the model
+                else if (modelHasWattage && !modelHasEfficiency && !modelHas80Plus) {
+                    displayText = `${item.brand} ${item.model} ${efficiency}`;
+                }
+                // Don't add parentheses if both are already in the model name
+            }
+            
+            // Add price
+            displayText += ` - $${item.price.toFixed(2)}`;
+            
+            option.textContent = displayText;
             psuSelect.appendChild(option);
         });
-    }
-    
-    // Check compatibility between components
-    async function checkCompatibility() {
-        isCompatible = true;
-        compatibilityIssues = [];
-        
-        // Reset compatibility UI
-        compatibilityMessage.textContent = 'Checking compatibility...';
-        document.querySelector('.compatibility-status').className = 'compatibility-status';
-        
-        // Check if components are selected
-        const hasSelection = Object.values(selectedComponents).some(component => component !== null);
-        
-        if (!hasSelection) {
-            compatibilityMessage.textContent = 'Select components to check compatibility';
-            return;
-        }
-        
-        // Check CPU and motherboard compatibility
-        if (selectedComponents.cpu && selectedComponents.motherboard) {
-            try {
-                // Use direct endpoint to check compatibility
-                const response = await fetch('/api/check-compatibility', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        cpu: selectedComponents.cpu,
-                        motherboard: selectedComponents.motherboard
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (!result.compatible) {
-                    isCompatible = false;
-                    const cpuName = `${selectedComponents.cpu.brand} ${selectedComponents.cpu.model}`;
-                    
-                    // Use the server-provided error message
-                    if (result.message) {
-                        compatibilityIssues.push(result.message);
-                    } else {
-                        const cpuSocket = selectedComponents.cpu.specs.socket;
-                        const mbSocket = selectedComponents.motherboard.specs.socket;
-                        compatibilityIssues.push(`CPU ${cpuName} requires ${cpuSocket} socket but motherboard has ${mbSocket} socket`);
-                    }
-                }
-            } catch (error) {
-                console.error('Error checking compatibility:', error);
-            }
-        }
         
         // Memory compatibility checks
         if (selectedComponents.motherboard && selectedComponents.memory) {
